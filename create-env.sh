@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Define the path to the .env file. This assumes that the .devcontainer directory
-# is at the root of your project structure.
-ENV_PATH="../.env"
+ENV_PATH=".env"
 
 # Create or clear the .env file
 echo "Creating or clearing .env file..."

@@ -11,6 +11,6 @@
         "ms-python.python"
     ],
     "forwardPorts": [5500],
-    "postCreateCommand": "/workspaces/<repository-name>/.devcontainer/create-env.sh",
+    "postCreateCommand": "./create-env.sh && source .env",
     "remoteUser": "root"
 }
