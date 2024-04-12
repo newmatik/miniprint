@@ -19,6 +19,9 @@ class TestPrintersAPI(unittest.TestCase):
         # Execute
         response = requests.get(url, headers=headers)
         
+        # Print response body for debugging purposes
+        print("Response Body:", response.json())
+        
         # Verify
         # Check if the response status code is 200 (OK)
         self.assertEqual(response.status_code, 200, "API failed to respond with status 200, received {0} instead.".format(response.status_code))
