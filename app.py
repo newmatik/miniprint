@@ -19,7 +19,7 @@ def require_apikey(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         apikey_received = request.headers.get('apikey')
-        if not apikey:
+        if not apikey_received:
             return jsonify({'error': 'API key is missing'}), 403
         if apikey_received != APIKEY:
             return jsonify({'error': 'Invalid API key', 'APIKEY': apikey_received}), 403
