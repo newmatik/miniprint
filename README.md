@@ -30,17 +30,24 @@ This Flask application provides a REST API to interact with Zebra label printers
    ```
 
 3. Install dependencies:
-   ```bash
-   pip install flask
-   ```
-   
-Set the API key and printer details in the script. Replace 'your_api_key_here' with your actual API key and update the printers dictionary with your printer configurations.
 
-4. Running the Server
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Copy .env and configure printers.py
+
+Copy .env_sampe to .env and set the API key. Update the printers dictionary with your printer configurations in printers.py.
+
+   ```bash
+   cp .env_sample .env
+   ```
+
+5. Running the Server
    
 Run the server with the following command:
   ```bash
-  python app.py
+  flask run
   ```
 
 This starts the server on http://0.0.0.0:5500/, making it accessible on all network interfaces on port 5500.
@@ -121,12 +128,6 @@ To check the status of your service and ensure it's running properly:
 ```
 sudo systemctl status miniprint.service
 ```
-
-## Security
-The API uses a hardcoded API key for authentication. It is recommended to use a more secure API key management system for production environments.
-
-## Logging
-Logging is set to DEBUG level, capturing detailed logs that can assist in diagnosing issues or understanding application behavior.
 
 ## Note
 This application is designed for demonstration and development purposes and may require additional security and error handling features for production use.
