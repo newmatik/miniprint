@@ -75,24 +75,52 @@ curl -X GET http://localhost:5500/printers/status -H "apikey: g9d8fh09df8hg09f8s
 
 To ensure that the Flask application starts automatically at server boot and restarts in case it crashes, we use systemd on Ubuntu.
 
-### Creating a systemd Service
+### Create a Service File
 
-1. **Create a systemd service file**:
-   - Location: `/etc/systemd/system/miniprint.service`
-   - Ensure you customize the service file with the correct paths and user information.
+First, create a systemd service file for your Flask application. You’ll need root or sudo privileges to write to the service directory.
 
-2. **Enable the Service**:
-   - Run `sudo systemctl enable miniprint.service` to enable automatic startup at boot.
+Open a terminal and use your preferred text editor to create a service file:
 
-3. **Start the Service**:
-   - Run `sudo systemctl start miniprint.service` to start the service immediately.
+```
+sudo nano /etc/systemd/system/miniprint.service
+```
 
-4. **Service Management Commands**:
-   - **Check status**: `sudo systemctl status miniprint.service`
-   - **Restart service**: `sudo systemctl restart miniprint.service`
-   - **Stop service**: `sudo systemctl stop miniprint.service`
+Add the following configuration to the file, customizing it to suit your application setup:
 
-This setup ensures that your application is resilient to crashes and is always available after system reboots.
+```
+[Unit]
+Description=Flask Application Service
+After=network.target
+
+[Service]
+User=your_username
+Group=your_usergroup
+WorkingDirectory=/path/to/your/application
+Environment="PATH=/path/to/your/venv/bin"
+ExecStart=/path/to/your/venv/bin/python app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### Enable and Start the Service
+
+After saving your service file, you'll need to reload the systemd manager configuration, enable the service to start on boot, and then start the service:
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable miniprint.service
+sudo systemctl start miniprint.service
+```
+
+### Check the Status of Your Service
+
+To check the status of your service and ensure it's running properly:
+
+```
+sudo systemctl status miniprint.service
+```
 
 ## Security
 The API uses a hardcoded API key for authentication. It is recommended to use a more secure API key management system for production environments.
