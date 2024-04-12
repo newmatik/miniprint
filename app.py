@@ -84,9 +84,14 @@ class PrintLabel(Resource):
 class HelloWorld(Resource):
     def get(self):
         return {'message': 'miniprint api'}
+    
+class Ping(Resource):
+    def get(self):
+        return {'message': 'pong'}
 
 # Add resources
 api.add_resource(HelloWorld, '/')
+api.add_resource(Ping, '/ping')
 api.add_resource(PrinterList, '/printers')
 api.add_resource(PrinterStatus, '/printers/status')
 api.add_resource(PrintLabel, '/print')
