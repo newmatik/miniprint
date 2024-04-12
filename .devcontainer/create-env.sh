@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# Ask the user for the API key
-echo "Please enter your API key:"
-read -s APIKEY
-
-# Create the .env file with the API key
+# Create the .env file
 echo "Creating .env file..."
-echo "APIKEY=$APIKEY" > .env
+echo "APIKEY=testapikey145" > .env
 echo "FLASK_APP=app.py" > .env
 echo "FLASK_ENV=development" > .env
 echo "FLASK_RUN_HOST=0.0.0.0" > .env
