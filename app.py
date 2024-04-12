@@ -18,11 +18,11 @@ logging.basicConfig(level=logging.DEBUG)
 def require_apikey(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        apikey = request.headers.get('apikey')
+        apikey_received = request.headers.get('apikey')
         if not apikey:
             return jsonify({'error': 'API key is missing'}), 403
-        if apikey != APIKEY:
-            return jsonify({'error': 'Invalid API key'}), 403
+        if apikey_received != APIKEY:
+            return jsonify({'error': 'Invalid API key', 'APIKEY': apikey_received}), 403
         return f(*args, **kwargs)
     return decorated_function
 

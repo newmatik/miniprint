@@ -25,6 +25,8 @@ jobs:
         pip install flake8 pytest
         pip install -r requirements.txt
     - name: Start Flask application
+      env:
+        APIKEY: ${{ secrets.APIKEY }}
       run: |
         FLASK_APP=app.py FLASK_ENV=production flask run --host=0.0.0.0 --port=5500 &
         sleep 5  # Wait for Flask to start
