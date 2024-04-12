@@ -69,12 +69,12 @@ def printers_status():
     return jsonify(status)
 
 
-def generate_zpl(batch, item_code, description_line1, description_line2, warehouse, parent_warehouse, msl, qty, date, user):
+def generate_zpl(batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part, warehouse, parent_warehouse, msl, qty, date, user):
     """
     Generates ZPL command string for a simple label with the given text.
     """
     return f"""
-    ^XA
+        ^XA
 
     ^FO280,10
     ^BQN,2,6,H
@@ -97,15 +97,22 @@ def generate_zpl(batch, item_code, description_line1, description_line2, warehou
     ^FO20,235^FD{description_line2}^FS
 
     ^CF0,20
+    ^FO20,270^FDManufacturer^FS
+    ^CF0,30
+    ^FO20,295^FD{manufacturer}^FS
+    ^CF0,30
+    ^FO20,325^FD{manufacturer_part}^FS
+
+    ^CF0,20
     ^FO280,180^FDIncoming^FS
     ^CF0,40
     ^FO280,205^FD{warehouse}^FS
     ^CF0,30
     ^FO280,245^FD{parent_warehouse}^FS
 
-    ^CF0,50
-    ^FO20,275^GB168,75,8,B,0^FS
-    ^FO40,295^FDMSL {msl}^FS
+    ^CF0,40
+    ^FO280,285^GB130,68,5,B,0^FS
+    ^FO295,305^FDMSL{msl}^FS
 
     ^CF0,20
     ^FO20,370^FDQty^FS
@@ -158,6 +165,14 @@ def print_label():
     if not description_line2:
         return jsonify({'error': 'Missing description_line2'}), 400
     
+    manufacturer = data.get('manufacturer')
+    if not manufacturer:
+        return jsonify({'error': 'Missing manufacturer'}), 400
+    
+    manufacturer_part = data.get('manufacturer_part')
+    if not manufacturer_part:
+        return jsonify({'error': 'Missing manufacturer_part'}), 400
+    
     warehouse = data.get('warehouse')
     if not warehouse:
         return jsonify({'error': 'Missing warehouse'}), 400
@@ -188,7 +203,7 @@ def print_label():
     if not printer:
         return jsonify({'error': 'Printer ID not found'}), 404
 
-    zpl_command = generate_zpl(batch, item_code, description_line1, description_line2, warehouse, parent_warehouse, msl, qty, date, user)
+    zpl_command = generate_zpl(batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part, warehouse, parent_warehouse, msl, qty, date, user)
     try:
         send_zpl_to_printer(printer['ip'], printer['port'], zpl_command)
         return jsonify({'message': 'Label sent to printer successfully'}), 200
