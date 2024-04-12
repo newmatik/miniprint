@@ -1,0 +1,16 @@
+{
+    "name": "Miniprint",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "settings": { 
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-python.python"
+    ],
+    "forwardPorts": [5500],
+    "postCreateCommand": "echo 'Ready!'",
+    "remoteUser": "root"
+}
