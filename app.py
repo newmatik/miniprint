@@ -74,7 +74,7 @@ def generate_zpl(batch, item_code, description_line1, description_line2, manufac
     Generates ZPL command string for a simple label with the given text.
     """
     return f"""
-        ^XA
+    ^XA
 
     ^FO280,10
     ^BQN,2,6,H
@@ -112,7 +112,7 @@ def generate_zpl(batch, item_code, description_line1, description_line2, manufac
 
     ^CF0,40
     ^FO280,285^GB130,68,5,B,0^FS
-    ^FO295,305^FDMSL{msl}^FS
+    ^FO295,305^FDMSL {msl}^FS
 
     ^CF0,20
     ^FO20,370^FDQty^FS
