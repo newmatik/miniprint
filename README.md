@@ -30,47 +30,39 @@ This Flask application provides a REST API to interact with Zebra label printers
    ```
 
 3. Install dependencies:
-
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Copy .env and configure printers.py
-
-Copy .env_sampe to .env and set the API key. Update the printers dictionary with your printer configurations in printers.py.
-
+4. Environment setup:
+   Copy .env_sampe to .env and set the API key. Update the printers dictionary with your printer configurations in printers.py.
    ```bash
    cp .env_sample .env
+   vim .env
    ```
 
-5. Running the Server
-   
-Run the server with the following command:
-  ```bash
-  flask run
-  ```
-
-This starts the server on http://0.0.0.0:5500/, making it accessible on all network interfaces on port 5500.
+5. Running the Server:
+   Run the server with the following command:
+   ```bash
+   flask run
+   ```
+   This starts the server on http://0.0.0.0:5500/, making it accessible on all network interfaces on port 5500.
 
 ## Usage
 
-### GET /printers
+- **GET /printers**
+   Requires API key
+   Returns a list of all printers
 
-Requires API key
-Returns a list of all printers
+- **GET /printers/status**
+   Requires API key
+   Returns the status of each printer (online, offline)
 
-### GET /printers/status
+- **POST /print**
+   Requires API key
+   Prints the ZPL label to the specified printer
 
-Requires API key
-Returns the status of each printer
-
-### POST /print
-
-Requires API key
-JSON payload: {"printer_id": "prt-batch-TWR1", "text": "Sample Text"}
-Sends the specified text to the printer to be printed
-
-Example Request
+### Example Request
 
 Using curl to check printer status:
 
@@ -81,6 +73,7 @@ curl -X GET http://localhost:5500/printers/status -H "apikey: g9d8fh09df8hg09f8s
 ## Deployment on Ubuntu Server
 
 To ensure that the Flask application starts automatically at server boot and restarts in case it crashes, we use systemd on Ubuntu.
+Consider deploying with a production-ready WSGI server like Gunicorn.
 
 ### Create a Service File
 
@@ -88,13 +81,13 @@ First, create a systemd service file for your Flask application. You’ll need r
 
 Open a terminal and use your preferred text editor to create a service file:
 
-```
+```bash
 sudo nano /etc/systemd/system/miniprint.service
 ```
 
 Add the following configuration to the file, customizing it to suit your application setup:
 
-```
+```bash
 [Unit]
 Description=Flask Application Service
 After=network.target
@@ -115,7 +108,7 @@ WantedBy=multi-user.target
 
 After saving your service file, you'll need to reload the systemd manager configuration, enable the service to start on boot, and then start the service:
 
-```
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable miniprint.service
 sudo systemctl start miniprint.service
@@ -125,7 +118,7 @@ sudo systemctl start miniprint.service
 
 To check the status of your service and ensure it's running properly:
 
-```
+```bash
 sudo systemctl status miniprint.service
 ```
 
