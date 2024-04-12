@@ -38,4 +38,4 @@ jobs:
       env:
         APIKEY: ${{ secrets.APIKEY }}
       run: |
-        pytest
+        pytest tests/
