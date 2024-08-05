@@ -117,7 +117,7 @@ def generate_msl_sticker(printer_id, msl, date, time):
     ^FO10,230^GB380,1,1^FS
 
     ^FX Text Bag Open date
-    ^CF0,20^FO25,245^FDBag Open Date: {date}^FS
+    ^CF0,20^FO25,245^FDBag Open Date:^FS
     ^CF0,20^FO270,245^FDTime:^FS
 
     ^FX Text Expiration Date

@@ -85,10 +85,6 @@ class PrintMSLLabel(Resource):
     method_decorators = [require_apikey]
 
     def post(self):
-        errors = validate_request(request.json)
-        if errors:
-            return {'errors': errors}, 400
-
         data = request.json
         printer_id = data['printer_id']
         printer = printers.get(printer_id)
