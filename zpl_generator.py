@@ -70,24 +70,34 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
 # ZPL generation code for MSL Sticker
 def generate_msl_sticker(printer_id, msl, date, time):
 
-    # Update the mounting time based on the MSL level
-    if msl == '1' or msl == 'MSL 1':
-        mounting_time = 'Unlimited'
-    elif msl == '2' or msl == 'MSL 2':
-        mounting_time = '1 year'
-    elif msl == '2A' or msl == 'MSL 2A':
-        mounting_time = '4 weeks'
-    elif msl == '3' or msl == 'MSL 3':
-        mounting_time = '168 hours'
-    elif msl == '4' or msl == 'MSL 4':
-        mounting_time = '72 hours'
-    elif msl == '5' or msl == 'MSL 5':
-        mounting_time = '48 hours'
-    elif msl == '5A' or msl == 'MSL 5A':
-        mounting_time = '24 hours'
-    elif msl == '6' or msl == 'MSL 6':
-        mounting_time = 'Bake before use'        
+    # Trim MSL value
+    msl = msl.replace('MSL ', '')
 
+    # Update the mounting time based on the MSL level
+    if msl == '1':
+        mounting_time = 'Unlimited'
+    elif msl == '2':
+        mounting_time = '1 year'
+    elif msl == '2A':
+        mounting_time = '4 weeks'
+    elif msl == '3':
+        mounting_time = '168 hours'
+    elif msl == '4':
+        mounting_time = '72 hours'
+    elif msl == '5':
+        mounting_time = '48 hours'
+    elif msl == '5A':
+        mounting_time = '24 hours'
+    elif msl == '6':
+        mounting_time = 'Bake before use'
+
+    # Check if msl is a single digit or double digit and adjust the position accordingly
+    if len(msl) == 2:
+        msl_print = f"^CF0,80^FO295,30^FD{msl}^FS"
+    else:
+        msl_print = f"^CF0,80^FO315,30^FD{msl}^FS"
+
+    # Generate the ZPL string...
     return f"""^XA
 
     ^FX Bounding Box
@@ -102,7 +112,7 @@ def generate_msl_sticker(printer_id, msl, date, time):
     ^CF0,80^FO115,30^FDMSL^FS
 
     ^FX Large Text MSL Number
-    ^CF0,80^FO315,30^FD{msl}^FS
+    ^CF0,80^FO315,30^FD{msl_print}^FS
 
     ^FX Horizontal Line
     ^FO10,110^GB380,1,1^FS
