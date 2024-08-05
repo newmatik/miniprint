@@ -95,7 +95,7 @@ class PrintMsl(Resource):
         if not printer:
             return {'error': 'Printer ID not found'}, 404
 
-        print_msl_command = generate_msl_sticker(data)
+        print_msl_command = generate_msl_sticker(**data)
         try:
             self.send_zpl_to_printer(printer['ip'], printer['port'], print_msl_command)
             return {'message': 'MSL label sent to printer successfully'}

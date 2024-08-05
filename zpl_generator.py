@@ -98,7 +98,8 @@ def generate_msl_sticker(printer_id, msl, date, time):
         msl_print = f"^CF0,80^FO315,30^FD{msl}^FS"
 
     # Generate the ZPL string...
-    return f"""^XA
+    return f"""
+    ^XA
 
     ^FX Bounding Box
     ^FO10,10^GB380,380,1,B,0^FS
