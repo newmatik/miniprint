@@ -12,7 +12,7 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
     ^XA
 
     ^FO280,10
-    ^BQN,2,6,H
+    ^BQN,2,5,H
     ^FDMM,A{batch}^FS
 
     ^CF0,20
