@@ -151,3 +151,31 @@ def generate_msl_sticker(printer_id, msl, date, time):
 
     ^XZ
     """
+
+
+# ZPL generation code for Special Instructions
+def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line_4, line_5):
+    return f"""
+    ^XA
+
+    ^FX Bounding Box
+    ^FO10,10^GB380,380,1,B,0^FS
+
+    ^FX Special Instructions Header
+    ^CF0,40, 45
+    ^FO23,25^FDSpecial Instructions^FS
+
+    ^FX Special Instructions Text
+    ^CF0,25^FO25,90^FD{line_1}^FS
+    ^CF0,25^FO25,115^FD{line_2}^FS
+    ^CF0,25^FO25,140^FD{line_3}^FS
+    ^CF0,25^FO25,165^FD{line_4}^FS
+    ^CF0,25^FO25,190^FD{line_5}^FS
+
+    ^FX Black Box Negative for Cell
+    ^LRY
+    ^FO11,11
+    ^GB378,59,59^FS
+
+    ^XZ
+    """
