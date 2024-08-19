@@ -154,7 +154,7 @@ def generate_msl_sticker(printer_id, msl, date, time):
 
 
 # ZPL generation code for Special Instructions
-def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line_4, line_5):
+def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line_4, line_5, line_6, line_7, line_8, line_9, line_10, line_11, line_12):
     return f"""
     ^XA
 
@@ -171,6 +171,13 @@ def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line
     ^CF0,25^FO25,140^FD{line_3}^FS
     ^CF0,25^FO25,165^FD{line_4}^FS
     ^CF0,25^FO25,190^FD{line_5}^FS
+    ^CF0,25^FO25,215^FD{line_6}^FS
+    ^CF0,25^FO25,240^FD{line_7}^FS
+    ^CF0,25^FO25,265^FD{line_8}^FS
+    ^CF0,25^FO25,290^FD{line_9}^FS
+    ^CF0,25^FO25,315^FD{line_10}^FS
+    ^CF0,25^FO25,340^FD{line_11}^FS
+    ^CF0,25^FO25,365^FD{line_12}^FS
 
     ^FX Black Box Negative for Cell
     ^LRY

@@ -12,6 +12,6 @@ def validate_msl_request(data):
 
 # Validation logic for special instructions print request
 def validate_special_instructions_request(data):
-    required_fields = ['printer_id', 'line_1', 'line_2', 'line_3', 'line_4', 'line_5']
+    required_fields = ['printer_id', 'line_1', 'line_2', 'line_3', 'line_4', 'line_5', 'line_6', 'line_7', 'line_8', 'line_9', 'line_10', 'line_11', 'line_12']
     missing = [field for field in required_fields if field not in data]
     return missing
