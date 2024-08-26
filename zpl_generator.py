@@ -6,6 +6,30 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
         box = "^FO280,280^GB130,68,5,B,0^FS"
     else:
         box = "^FO280,280^GB110,68,5,B,0^FS"
+    
+    # Shorten warehouse name for Incoming Goods
+    if warehouse == 'Incoming Goods':
+        warehouse = 'Incoming'
+
+    # Shorten parent warehouse name for All Warehouses and Kommissioniert
+    if parent_warehouse == 'All Warehouses':
+        parent_warehouse = 'All WH'
+    elif (parent_warehouse == 'Kommissioniert-RO' or parent_warehouse == 'Kommissioniert-DE'):
+        parent_warehouse = 'Kommissioniert'
+    
+    # Check if warehouse is long and adjust the font size accordingly
+    if len(warehouse) > 7:
+        warehouse = f"^CF0,30^FO280,200^FD{warehouse}^FS"
+        parent_warehouse_yposition = '230'
+    else:
+        warehouse = f"^CF0,40^FO280,200^FD{warehouse}^FS"
+        parent_warehouse_yposition = '240'
+    
+    # Check if parent warehouse is long and adjust the font size accordingly
+    if len(parent_warehouse) > 9:
+        parent_warehouse = f"^CF0,20^FO280,{parent_warehouse_yposition}^FD{parent_warehouse}^FS"
+    else:
+        parent_warehouse = f"^CF0,30^FO280,{parent_warehouse_yposition}^FD{parent_warehouse}^FS"
 
     # Generate the ZPL string...
     return f"""
@@ -40,10 +64,8 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
 
     ^CF0,20
     ^FO280,175^FDIncoming^FS
-    ^CF0,40
-    ^FO280,200^FD{warehouse}^FS
-    ^CF0,30
-    ^FO280,240^FD{parent_warehouse}^FS
+    {warehouse}
+    {parent_warehouse}
 
     ^CF0,30
     {box}
