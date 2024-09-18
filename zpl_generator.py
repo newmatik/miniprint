@@ -1,5 +1,20 @@
 # ZPL generation code
 def generate_zpl(printer_id, batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part_line1, manufacturer_part_line2, warehouse, parent_warehouse, msl, qty, date, user):
+
+    # Sanitize input values and remove any leading/trailing whitespaces
+    batch = batch.strip()
+    item_code = item_code.strip()
+    description_line1 = description_line1.strip()
+    description_line2 = description_line2.strip()
+    manufacturer = manufacturer.strip()
+    manufacturer_part_line1 = manufacturer_part_line1.strip()
+    manufacturer_part_line2 = manufacturer_part_line2.strip()
+    warehouse = warehouse.strip()
+    parent_warehouse = parent_warehouse.strip()
+    msl = msl.strip()
+    qty = qty.strip()
+    date = date.strip()
+    user = user.strip()
     
     # Check if msl is a single digit or double digit and adjust the box size accordingly
     if len(msl) == 2:
@@ -30,6 +45,12 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
         parent_warehouse = f"^CF0,20^FO280,{parent_warehouse_yposition}^FD{parent_warehouse}^FS"
     else:
         parent_warehouse = f"^CF0,30^FO280,{parent_warehouse_yposition}^FD{parent_warehouse}^FS"
+    
+    # If manufacturer and manufacturer part number are empty, print as "None" instead of "empty"
+    if manufacturer == '' and manufacturer_part_line1 == '' and manufacturer_part_line2 == '':
+        manufacturer = 'None' # Print None to inform user that there is no MPN for the batch
+        manufacturer_part_line1 = '' # Leave empty to avoid printing "None" multiple times (will look redundant)
+        manufacturer_part_line2 = '' # Leave empty to avoid printing "None" multiple times (will look redundant)
 
     # Generate the ZPL string...
     return f"""
