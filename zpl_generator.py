@@ -12,8 +12,6 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
     warehouse = warehouse.strip()
     parent_warehouse = parent_warehouse.strip()
     msl = msl.strip()
-    qty = qty.strip()
-    date = date.strip()
     user = user.strip()
     
     # Check if msl is a single digit or double digit and adjust the box size accordingly
