@@ -1,18 +1,62 @@
 # ZPL generation code
 def generate_zpl(printer_id, batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part_line1, manufacturer_part_line2, warehouse, parent_warehouse, msl, qty, date, user):
 
-    # Sanitize input values and remove any leading/trailing whitespaces
-    batch = batch.strip()
-    item_code = item_code.strip()
-    description_line1 = description_line1.strip()
-    description_line2 = description_line2.strip()
-    manufacturer = manufacturer.strip()
-    manufacturer_part_line1 = manufacturer_part_line1.strip()
-    manufacturer_part_line2 = manufacturer_part_line2.strip()
-    warehouse = warehouse.strip()
-    parent_warehouse = parent_warehouse.strip()
-    msl = msl.strip()
-    user = user.strip()
+# Sanitize input values and remove any leading/trailing whitespaces
+# Also check if the input values are None and replace them with empty strings before stripping to avoid errors
+    if batch is None:
+        batch = ''
+    else:
+        batch = batch.strip()
+
+    if item_code is None:
+        item_code = ''
+    else:
+        item_code = item_code.strip()
+
+    if description_line1 is None:
+        description_line1 = ''
+    else:
+        description_line1 = description_line1.strip()
+
+    if description_line2 is None:
+        description_line2 = ''
+    else:
+        description_line2 = description_line2.strip()
+
+    if manufacturer is None:
+        manufacturer = ''
+    else:
+        manufacturer = manufacturer.strip()
+
+    if manufacturer_part_line1 is None:
+        manufacturer_part_line1 = ''
+    else:
+        manufacturer_part_line1 = manufacturer_part_line1.strip()
+
+    if manufacturer_part_line2 is None:
+        manufacturer_part_line2 = ''
+    else:
+        manufacturer_part_line2 = manufacturer_part_line2.strip()
+
+    if warehouse is None:
+        warehouse = ''
+    else:
+        warehouse = warehouse.strip()
+
+    if parent_warehouse is None:
+        parent_warehouse = ''
+    else:
+        parent_warehouse = parent_warehouse.strip()
+
+    if msl is None:
+        msl = ''
+    else:
+        msl = msl.strip()
+
+    if user is None:
+        user = ''
+    else:
+        user = user.strip()
     
     # Check if msl is a single digit or double digit and adjust the box size accordingly
     if len(msl) == 2:
