@@ -166,13 +166,13 @@ def generate_msl_sticker(printer_id, msl, date, time):
     elif msl == '2A':
         mounting_time = '4 weeks'
     elif msl == '3':
-        mounting_time = '168 hours'
+        mounting_time = '168 hours (7 days)'
     elif msl == '4':
-        mounting_time = '72 hours'
+        mounting_time = '72 hours (3 days)'
     elif msl == '5':
-        mounting_time = '48 hours'
+        mounting_time = '48 hours (2 days)'
     elif msl == '5A':
-        mounting_time = '24 hours'
+        mounting_time = '24 hours (1 day)'
     elif msl == '6':
         mounting_time = 'Bake before use'
 
