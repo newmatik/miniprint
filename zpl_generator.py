@@ -217,18 +217,10 @@ def generate_msl_sticker(printer_id, msl, date, time):
     ^CF0,20^FO270,280^FDTime:^FS
     ^CF0,20^FO25,315^FDEmployee Signature:^FS
 
-    ^FX Text Bottom
-    ^CF0,18^FO25,363^FDMSL level defined by IPC/JEDEC J-STD-020^FS
-
     ^FX Black Box Negative
     ^LRY
     ^FO280,11
     ^GB109,99,95^FS
-
-    ^FX Black Box Negative
-    ^LRY
-    ^FO11,350
-    ^GB378,39,20^FS
 
     ^XZ
     """
