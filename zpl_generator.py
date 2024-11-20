@@ -178,24 +178,19 @@ def generate_msl_sticker(printer_id, msl, date, time):
 
     # Check if msl is a single digit or double digit and adjust the position accordingly
     if len(msl) == 2:
-        msl_print = f"^CF0,80^FO295,30^FD{msl}^FS"
+        msl_print = f"^CF0,80^FO265,30^FD{msl}^FS"
     else:
-        msl_print = f"^CF0,80^FO315,30^FD{msl}^FS"
+        msl_print = f"^CF0,80^FO285,30^FD{msl}^FS"
 
     # Generate the ZPL string...
     return f"""
     ^XA
 
-    ^FX Text Moisture Sensitive Device
-    ^CF0,15^FO25,30^FDMOISTURE^FS
-    ^CF0,15^FO25,53^FDSENSITIVE^FS
-    ^CF0,15^FO25,76^FDDEVICE^FS
-
     ^FX Large Text MSL
-    ^CF0,80^FO115,30^FDMSL^FS
+    ^CF0,80^FO85,30^FDMSL^FS
 
     ^FX Large Text MSL Number
-    ^CF0,80^FO315,30^FD{msl_print}^FS
+    ^CF0,80^FO285,30^FD{msl_print}^FS
 
     ^FX Horizontal Line
     ^FO10,110^GB430,1,1^FS
@@ -224,7 +219,7 @@ def generate_msl_sticker(printer_id, msl, date, time):
 
     ^FX Black Box Negative
     ^LRY
-    ^FO280,11
+    ^FO250,11
     ^GB109,99,95^FS
 
     ^XZ
