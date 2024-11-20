@@ -198,24 +198,29 @@ def generate_msl_sticker(printer_id, msl, date, time):
     ^CF0,80^FO315,30^FD{msl_print}^FS
 
     ^FX Horizontal Line
-    ^FO10,110^GB380,1,1^FS
+    ^FO10,110^GB430,1,1^FS
 
-    ^FX Text Bag Seal date
+    ^FX Text Bag Seal
     ^CF0,20^FO25,125^FDBag Seal Date:^FS
     ^CF0,20^FO25,160^FDBag Seal Time:^FS
     ^CF0,20^FO25,195^FDMounting after opening: {mounting_time}^FS
 
     ^FX Horizontal Line
-    ^FO10,230^GB380,1,1^FS
+    ^FO10,230^GB430,1,1^FS
 
-    ^FX Text Bag Open date
+    ^FX Text Bag Open
     ^CF0,20^FO25,245^FDBag Open Date:^FS
-    ^CF0,20^FO270,245^FDTime:^FS
+    ^CF0,20^FO25,280^FDBag Open Time:^FS
 
-    ^FX Text Expiration Date
-    ^CF0,20^FO25,280^FDExpiration Date:^FS
-    ^CF0,20^FO270,280^FDTime:^FS
-    ^CF0,20^FO25,315^FDEmployee Signature:^FS
+    ^FX Text Expiration
+    ^CF0,20^FO25,315^FDExpiration Date:^FS
+    ^CF0,20^FO25,350^FDExpiration Time:^FS
+
+    ^FX Horizontal Line
+    ^FO10,385^GB430,1,1^FS
+
+    ^FX Employee Signature
+    ^CF0,20^FO25,400^FDEmployee Signature:^FS
 
     ^FX Black Box Negative
     ^LRY
