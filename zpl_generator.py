@@ -192,35 +192,40 @@ def generate_msl_sticker(printer_id, msl, date, time):
     ^FX Large Text MSL Number
     ^CF0,80^FO285,30^FD{msl_print}^FS
 
-    ^FX Horizontal Line
+    ^FX Horizontal Line 1
     ^FO10,110^GB430,1,1^FS
 
-    ^FX Text Bag Seal
-    ^CF0,20^FO25,125^FDBag Seal Date:^FS
-    ^CF0,20^FO98,160^FDTime:^FS
-    ^CF0,20^FO25,195^FDMounting after opening: {mounting_time}^FS
+    ^FX Texts Bag Seal Date and Time
+    ^CF0,20^FO25,130^FDBag Seal Date:^FS
+    ^CF0,20^FO98,170^FDTime:^FS
 
-    ^FX Horizontal Line
-    ^FO10,230^GB430,1,1^FS
+    ^FX Vertical Line 1
+    ^FO303,115^GB3,80,3^FS
 
-    ^FX Text Bag Open
-    ^CF0,20^FO25,245^FDBag Open Date:^FS
-    ^CF0,20^FO25,280^FDBag Open Time:^FS
+    ^FX Horizontal Line 2
+    ^FO10,200^GB430,1,1^FS
 
-    ^FX Text Expiration
-    ^CF0,20^FO25,315^FDExpiration Date:^FS
-    ^CF0,20^FO25,350^FDExpiration Time:^FS
+    ^FX Mounting Time
+    ^CF0,20^FO25,220^FDMounting after opening: {mounting_time}^FS
 
-    ^FX Horizontal Line
-    ^FO10,385^GB430,1,1^FS
+    ^FX Horizontal Line 3
+    ^FO10,255^GB430,1,1^FS
 
-    ^FX Employee Signature
-    ^CF0,20^FO25,400^FDEmployee Signature:^FS
+    ^FX Texts Bag Open Date and Time
+    ^CF0,20^FO25,275^FDBag Open Date:^FS
+    ^CF0,20^FO104,315^FDTime:^FS
 
-    ^FX Black Box Negative
+    ^FX Texts Expiration Date and Time
+    ^CF0,20^FO25,355^FDExpiration Date:^FS
+    ^CF0,20^FO108,395^FDTime:^FS
+
+    ^FX Vertical Line 2
+    ^FO303,265^GB3,155,3^FS
+
+    ^FX Black Box Negative (Must be last, otherwise it will make other lines negative as well)
     ^LRY
-    ^FO250,11
-    ^GB109,99,95^FS
+    ^FO250,5
+    ^GB109,105,95^FS
 
     ^XZ
     """
