@@ -186,9 +186,6 @@ def generate_msl_sticker(printer_id, msl, date, time):
     return f"""
     ^XA
 
-    ^FX Bounding Box
-    ^FO10,10^GB380,380,1,B,0^FS
-
     ^FX Text Moisture Sensitive Device
     ^CF0,15^FO25,30^FDMOISTURE^FS
     ^CF0,15^FO25,53^FDSENSITIVE^FS
