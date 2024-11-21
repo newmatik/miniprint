@@ -264,3 +264,42 @@ def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line
 
     ^XZ
     """
+
+
+
+# ZPL generation code for DRY label
+def generate_dry_label(printer_id):
+
+    # Generate the ZPL string...
+    return """
+    ^XA
+
+    ^FX Large Text DRY
+    ^CF0,90^FO140,30^FDDRY^FS
+
+    ^FX Horizontal Line 1
+    ^FO10,120^GB430,1,1^FS
+
+    ^FX Texts Start Date and Time
+    ^CF0,20^FO25,140^FDTemperature:^FS
+    ^CF0,20^FO47,180^FDStart Date:^FS
+    ^CF0,20^FO87,220^FDTime:^FS
+
+    ^FX Horizontal Line 2
+    ^FO10,250^GB430,1,1^FS
+
+    ^FX Texts End Date and Time
+    ^CF0,20^FO54,270^FDEnd Date:^FS
+    ^CF0,20^FO86,310^FDTime:^FS
+
+    ^FX Text Duration
+    ^CF0,20^FO57,350^FDDuration:^FS
+
+    ^FX Horizontal Line 3
+    ^FO10,385^GB430,1,1^FS
+
+    ^FX Vertical Line
+    ^FO303,125^GB3,255,3^FS
+
+    ^XZ
+    """
