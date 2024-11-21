@@ -178,6 +178,7 @@ api.add_resource(PrinterStatus, '/printers/status')
 api.add_resource(PrintLabel, '/print')
 api.add_resource(PrintMsl, '/print/msl')
 api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
+api.add_resource(PrintDry, '/print/dry')
 
 if __name__ == '__main__':
     app.run(
