@@ -6,8 +6,8 @@ import os
 import logging
 from dotenv import load_dotenv
 from printers import printers
-from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label
-from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request
+from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label
+from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request
 
 # Load environment variables
 load_dotenv()
@@ -152,7 +152,34 @@ class PrintDry(Resource):
         print_msl_command = generate_dry_label(**data)
         try:
             self.send_zpl_to_printer(printer['ip'], printer['port'], print_msl_command)
-            return {'message': 'MSL label sent to printer successfully'}
+            return {'message': 'DRY label sent to printer successfully'}
+        except Exception as e:
+            return {'error': str(e)}, 500
+
+    def send_zpl_to_printer(self, printer_ip, printer_port, zpl_data):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.connect((printer_ip, printer_port))
+            sock.sendall(zpl_data.encode('utf-8'))
+
+
+class PrintTracescanLabel(Resource):
+    method_decorators = [require_apikey]
+
+    def post(self):
+        errors = validate_tracescan_request(request.json)
+        if errors:
+            return {'errors': errors}, 400
+
+        data = request.json
+        printer_id = data['printer_id']
+        printer = printers.get(printer_id)
+        if not printer:
+            return {'error': 'Printer ID not found'}, 404
+
+        print_msl_command = generate_tracescan_label(**data)
+        try:
+            self.send_zpl_to_printer(printer['ip'], printer['port'], print_msl_command)
+            return {'message': 'Tracescan label sent to printer successfully'}
         except Exception as e:
             return {'error': str(e)}, 500
 
@@ -179,6 +206,7 @@ api.add_resource(PrintLabel, '/print')
 api.add_resource(PrintMsl, '/print/msl')
 api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
 api.add_resource(PrintDry, '/print/dry')
+api.add_resource(PrintTracescanLabel, '/print/tracescan')
 
 if __name__ == '__main__':
     app.run(

@@ -21,3 +21,9 @@ def validate_dry_request(data):
     required_fields = ['printer_id']
     missing = [field for field in required_fields if field not in data]
     return missing
+
+# Validation for Tracescan Label print request
+def validate_tracescan_request(data):
+    required_fields = ['printer_id', 'hw_version', 'sw_version', 'standard_indicator', 'wo_serial_number', 'ginv_serial', 'ginv_description', 'ioca_serial', 'ioca_description', 'mcua_serial', 'mcua_description', 'lcda_serial', 'lcda_description']
+    missing = [field for field in required_fields if field not in data]
+    return missing

@@ -266,7 +266,6 @@ def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line
     """
 
 
-
 # ZPL generation code for DRY label
 def generate_dry_label(printer_id):
 
@@ -300,6 +299,64 @@ def generate_dry_label(printer_id):
 
     ^FX Vertical Line
     ^FO303,125^GB3,255,3^FS
+
+    ^XZ
+    """
+
+
+# ZPL generation code for CDS Tracescan Label
+def generate_tracescan_label(
+    printer_id: str,
+    hw_version: str,
+    sw_version: str,
+    standard_indicator: str,
+    wo_serial_number: str,
+    ginv_serial: str,
+    ginv_description: str,
+    ioca_serial: str,
+    ioca_description: str,
+    mcua_serial: str,
+    mcua_description: str,
+    lcda_serial: str,
+    lcda_description: str
+):
+
+    # Generate the ZPL string...
+    return f"""
+    ^XA
+
+    ^FX Item Description
+    ^CFJ,15
+    ^FO15,15^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
+
+    ^FX WO Serial Number
+    ^CF0,28
+    ^FO15,35^FD{wo_serial_number}^FS
+
+    ^FX Datamatrix
+    ^FO15,70
+    ^BXN,7,200,36,36
+    ^FD{wo_serial_number}^FS
+
+    ^GINV Details
+    ^CFJ,15
+    ^FO15,350^FD{ginv_description}^FS
+    ^FO15,370^FD{ginv_serial}^FS
+
+    ^IOCA Details
+    ^CFJ,15
+    ^FO15,400^FD{ioca_description}^FS
+    ^FO15,420^FD{ioca_serial}^FS
+
+    ^MCUA Details
+    ^CFJ,15
+    ^FO15,450^FD{mcua_description}^FS
+    ^FO15,470^FD{mcua_serial}^FS
+
+    ^LCDA Details
+    ^CFJ,15
+    ^FO15,500^FD{lcda_description}^FS
+    ^FO15,520^FD{lcda_serial}^FS
 
     ^XZ
     """
