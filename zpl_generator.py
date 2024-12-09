@@ -310,15 +310,7 @@ def generate_tracescan_label(
     hw_version: str,
     sw_version: str,
     standard_indicator: str,
-    wo_serial_number: str,
-    ginv_serial: str,
-    ginv_description: str,
-    ioca_serial: str,
-    ioca_description: str,
-    mcua_serial: str,
-    mcua_description: str,
-    lcda_serial: str,
-    lcda_description: str
+    wo_serial_number: str
 ):
 
     # Generate the ZPL string...
@@ -329,34 +321,11 @@ def generate_tracescan_label(
     ^CFJ,15
     ^FO15,15^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
 
-    ^FX WO Serial Number
-    ^CF0,28
-    ^FO15,35^FD{wo_serial_number}^FS
-
-    ^FX Datamatrix
-    ^FO15,70
-    ^BXN,7,200,36,36
+    ^FX Code128 with WO Serial Number
+    ^BY2,3,10
+    ^FO60,90
+    ^BCN,160,Y,Y,N
     ^FD{wo_serial_number}^FS
-
-    ^GINV Details
-    ^CFJ,15
-    ^FO15,350^FD{ginv_description}^FS
-    ^FO15,370^FD{ginv_serial}^FS
-
-    ^IOCA Details
-    ^CFJ,15
-    ^FO15,400^FD{ioca_description}^FS
-    ^FO15,420^FD{ioca_serial}^FS
-
-    ^MCUA Details
-    ^CFJ,15
-    ^FO15,450^FD{mcua_description}^FS
-    ^FO15,470^FD{mcua_serial}^FS
-
-    ^LCDA Details
-    ^CFJ,15
-    ^FO15,500^FD{lcda_description}^FS
-    ^FO15,520^FD{lcda_serial}^FS
 
     ^XZ
     """
