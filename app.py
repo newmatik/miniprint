@@ -36,12 +36,12 @@ class PrinterCommunicationMixin:
                 sock.settimeout(10)  # Add timeout for better error handling
                 sock.connect((printer_ip, printer_port))
                 sock.sendall(zpl_data.encode('utf-8'))
-        except socket.timeout:
+        except socket.timeout as e:
             logging.error(f"Connection timeout to printer at {printer_ip}:{printer_port}")
-            raise Exception("Printer connection timeout")
+            raise Exception("Printer connection timeout") from e
         except socket.error as e:
             logging.error(f"Socket error while connecting to printer at {printer_ip}:{printer_port}: {str(e)}")
-            raise Exception(f"Printer connection error: {str(e)}")
+            raise Exception(f"Printer connection error: {str(e)}") from e
         except Exception as e:
             logging.error(f"Unexpected error while sending data to printer: {str(e)}")
             raise
@@ -79,7 +79,7 @@ class PrinterStatus(Resource):
             try:
                 sock.connect((printer_ip, printer_port))
                 return True
-            except (socket.timeout, socket.error) as e:
+            except Exception as e:
                 logging.warning(f"Failed to connect to {printer_ip}:{printer_port} - {e}")
                 return False
 
