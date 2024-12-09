@@ -311,7 +311,7 @@ def validate_serial_number(serial: str) -> bool:
         raise ValueError("Serial number must be in format: XXXXX-XXXXXXXXXXX")
     
     # Code128 has practical length limits for reliable scanning
-    if len(serial) > 20:  # Adjust limit based on your scanner specifications
+    if len(serial) > 17:
         raise ValueError("Serial number exceeds maximum length for reliable scanning")
     
     return True
