@@ -1,3 +1,5 @@
+import re
+
 # ZPL generation code
 def generate_zpl(printer_id, batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part_line1, manufacturer_part_line2, warehouse, parent_warehouse, msl, qty, date, user):
 
@@ -304,24 +306,29 @@ def generate_dry_label(printer_id):
     """
 
 
+def validate_serial_number(serial: str) -> bool:
+    """Validate serial number format and length for Code128 barcode."""
+    # Check format matches pattern: 5 digits-11 digits
+    if not re.match(r'^\d{5}-\d{11}$', serial):
+        raise ValueError("Serial number must be in format: XXXXX-XXXXXXXXXXX")
+    
+    # Code128 has practical length limits for reliable scanning
+    if len(serial) > 17:
+        raise ValueError("Serial number exceeds maximum length for reliable scanning")
+    
+    return True
+
+
 # ZPL generation code for CDS Tracescan Label
 def generate_tracescan_label(
     printer_id: str,
     hw_version: str,
     sw_version: str,
     standard_indicator: str,
-    wo_serial_number: str,
-    ginv_serial: str,
-    ginv_description: str,
-    ioca_serial: str,
-    ioca_description: str,
-    mcua_serial: str,
-    mcua_description: str,
-    lcda_serial: str,
-    lcda_description: str
+    wo_serial_number: str
 ):
+    validate_serial_number(wo_serial_number)
 
-    # Generate the ZPL string...
     return f"""
     ^XA
 
@@ -329,34 +336,11 @@ def generate_tracescan_label(
     ^CFJ,15
     ^FO15,15^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
 
-    ^FX WO Serial Number
-    ^CF0,28
-    ^FO15,35^FD{wo_serial_number}^FS
-
-    ^FX Datamatrix
-    ^FO15,70
-    ^BXN,7,200,36,36
+    ^FX Code128 with WO Serial Number
+    ^BY2,3,10
+    ^FO60,90
+    ^BCN,160,Y,Y,N
     ^FD{wo_serial_number}^FS
-
-    ^GINV Details
-    ^CFJ,15
-    ^FO15,350^FD{ginv_description}^FS
-    ^FO15,370^FD{ginv_serial}^FS
-
-    ^IOCA Details
-    ^CFJ,15
-    ^FO15,400^FD{ioca_description}^FS
-    ^FO15,420^FD{ioca_serial}^FS
-
-    ^MCUA Details
-    ^CFJ,15
-    ^FO15,450^FD{mcua_description}^FS
-    ^FO15,470^FD{mcua_serial}^FS
-
-    ^LCDA Details
-    ^CFJ,15
-    ^FO15,500^FD{lcda_description}^FS
-    ^FO15,520^FD{lcda_serial}^FS
 
     ^XZ
     """
