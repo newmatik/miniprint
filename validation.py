@@ -1,29 +1,112 @@
-# Request validation logic
-def validate_request(data):
-    required_fields = ['printer_id', 'batch', 'item_code', 'description_line1', 'description_line2', 'manufacturer', 'manufacturer_part_line1', 'manufacturer_part_line2', 'warehouse', 'parent_warehouse', 'msl', 'qty', 'date', 'user']
-    missing = [field for field in required_fields if field not in data]
-    return missing
+from typing import List, Dict, Any
+from dataclasses import dataclass
+from enum import Enum
 
-# Validation logic for MSL print request
-def validate_msl_request(data):
-    required_fields = ['printer_id', 'msl', 'date', 'time']
-    missing = [field for field in required_fields if field not in data]
-    return missing
+class ValidationError(Exception):
+    """Custom exception for validation errors"""
+    pass
 
-# Validation logic for special instructions print request
-def validate_special_instructions_request(data):
-    required_fields = ['printer_id', 'line_1', 'line_2', 'line_3', 'line_4', 'line_5', 'line_6', 'line_7', 'line_8', 'line_9', 'line_10', 'line_11', 'line_12']
-    missing = [field for field in required_fields if field not in data]
-    return missing
+class FieldRequirement(Enum):
+    """Enum for field requirements"""
+    REQUIRED = "required"
+    OPTIONAL = "optional"
 
-# Validation logic for DRY print request
-def validate_dry_request(data):
-    required_fields = ['printer_id']
-    missing = [field for field in required_fields if field not in data]
-    return missing
+@dataclass
+class ValidationRule:
+    """Validation rule for a field"""
+    name: str
+    requirement: FieldRequirement = FieldRequirement.REQUIRED
 
-# Validation for Tracescan Label print request
-def validate_tracescan_request(data):
-    required_fields = ['printer_id', 'hw_version', 'sw_version', 'standard_indicator', 'wo_serial_number', 'ginv_serial', 'ginv_description', 'ioca_serial', 'ioca_description', 'mcua_serial', 'mcua_description', 'lcda_serial', 'lcda_description']
-    missing = [field for field in required_fields if field not in data]
-    return missing
+class RequestValidator:
+    """Base validator class for all request types"""
+    
+    def __init__(self, rules: List[ValidationRule]):
+        self.rules = rules
+        self._required_fields = [rule.name for rule in rules 
+                               if rule.requirement == FieldRequirement.REQUIRED]
+
+    def validate(self, data: Dict[str, Any]) -> List[str]:
+        """
+        Validate the request data against the rules
+        
+        Args:
+            data: Dictionary containing the request data
+            
+        Returns:
+            List of missing required fields
+        """
+        if not isinstance(data, dict):
+            raise ValidationError("Input data must be a dictionary")
+            
+        return [field for field in self._required_fields if field not in data]
+
+# Predefined validators for different request types
+STANDARD_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id"),
+    ValidationRule("batch"),
+    ValidationRule("item_code"),
+    ValidationRule("description_line1"),
+    ValidationRule("description_line2"),
+    ValidationRule("manufacturer"),
+    ValidationRule("manufacturer_part_line1"),
+    ValidationRule("manufacturer_part_line2"),
+    ValidationRule("warehouse"),
+    ValidationRule("parent_warehouse"),
+    ValidationRule("msl"),
+    ValidationRule("qty"),
+    ValidationRule("date"),
+    ValidationRule("user"),
+])
+
+MSL_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id"),
+    ValidationRule("msl"),
+    ValidationRule("date"),
+    ValidationRule("time"),
+])
+
+SPECIAL_INSTRUCTIONS_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id")] + 
+    [ValidationRule(f"line_{i}") for i in range(1, 13)]
+)
+
+DRY_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id"),
+])
+
+TRACESCAN_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id"),
+    ValidationRule("hw_version"),
+    ValidationRule("sw_version"),
+    ValidationRule("standard_indicator"),
+    ValidationRule("wo_serial_number"),
+    ValidationRule("ginv_serial"),
+    ValidationRule("ginv_description"),
+    ValidationRule("ioca_serial"),
+    ValidationRule("ioca_description"),
+    ValidationRule("mcua_serial"),
+    ValidationRule("mcua_description"),
+    ValidationRule("lcda_serial"),
+    ValidationRule("lcda_description"),
+])
+
+# Request validation functions with improved type hints
+def validate_request(data: Dict[str, Any]) -> List[str]:
+    """Validate standard print request"""
+    return STANDARD_VALIDATOR.validate(data)
+
+def validate_msl_request(data: Dict[str, Any]) -> List[str]:
+    """Validate MSL print request"""
+    return MSL_VALIDATOR.validate(data)
+
+def validate_special_instructions_request(data: Dict[str, Any]) -> List[str]:
+    """Validate special instructions print request"""
+    return SPECIAL_INSTRUCTIONS_VALIDATOR.validate(data)
+
+def validate_dry_request(data: Dict[str, Any]) -> List[str]:
+    """Validate DRY print request"""
+    return DRY_VALIDATOR.validate(data)
+
+def validate_tracescan_request(data: Dict[str, Any]) -> List[str]:
+    """Validate Tracescan Label print request"""
+    return TRACESCAN_VALIDATOR.validate(data)
