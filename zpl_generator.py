@@ -304,6 +304,19 @@ def generate_dry_label(printer_id):
     """
 
 
+def validate_serial_number(serial: str) -> bool:
+    """Validate serial number format and length for Code128 barcode."""
+    # Check format matches pattern: 5 digits-11 digits
+    if not re.match(r'^\d{5}-\d{11}$', serial):
+        raise ValueError("Serial number must be in format: XXXXX-XXXXXXXXXXX")
+    
+    # Code128 has practical length limits for reliable scanning
+    if len(serial) > 20:  # Adjust limit based on your scanner specifications
+        raise ValueError("Serial number exceeds maximum length for reliable scanning")
+    
+    return True
+
+
 # ZPL generation code for CDS Tracescan Label
 def generate_tracescan_label(
     printer_id: str,
@@ -312,8 +325,8 @@ def generate_tracescan_label(
     standard_indicator: str,
     wo_serial_number: str
 ):
+    validate_serial_number(wo_serial_number)
 
-    # Generate the ZPL string...
     return f"""
     ^XA
 
