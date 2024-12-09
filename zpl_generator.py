@@ -1,3 +1,5 @@
+import re
+
 # ZPL generation code
 def generate_zpl(printer_id, batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part_line1, manufacturer_part_line2, warehouse, parent_warehouse, msl, qty, date, user):
 
