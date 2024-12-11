@@ -333,8 +333,8 @@ def generate_tracescan_label(
     ^XA
 
     ^FX Item Description
-    ^CFJ,15
-    ^FO15,15^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
+    ^CFB,20
+    ^FO50,20^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
 
     ^FX Code128 with WO Serial Number
     ^BY2,3,10
