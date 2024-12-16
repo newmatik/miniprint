@@ -1,6 +1,6 @@
 import re
 
-def strip_or_empty(value):
+def strip_or_empty(value: str) -> str:
     """Return stripped value or empty string if None.
     
     Args:
@@ -13,20 +13,20 @@ def strip_or_empty(value):
 
 
 def generate_zpl(
-    printer_id,
-    batch,
-    item_code,
-    description_line1,
-    description_line2,
-    manufacturer,
-    manufacturer_part_line1,
-    manufacturer_part_line2,
-    warehouse,
-    parent_warehouse,
-    msl,
-    qty,
-    date,
-    user
+    printer_id: str,
+    batch: str,
+    item_code: str,
+    description_line1: str,
+    description_line2: str,
+    manufacturer: str,
+    manufacturer_part_line1: str,
+    manufacturer_part_line2: str,
+    warehouse: str,
+    parent_warehouse: str,
+    msl: str,
+    qty: str,
+    date: str,
+    user: str,
     ) -> str:
     """
     Generate ZPL command for printing standard batch labels.
@@ -159,7 +159,12 @@ def generate_zpl(
     """
 
 
-def generate_msl_sticker(printer_id, msl, date, time):
+def generate_msl_sticker(
+    printer_id: str,
+    msl: str,
+    date: str,
+    time: str,
+    ) -> str:
     """
     Generate ZPL command for printing MSL stickers.
 
@@ -250,19 +255,19 @@ def generate_msl_sticker(printer_id, msl, date, time):
 
 
 def generate_special_instructions_label(
-    printer_id,
-    line_1,
-    line_2,
-    line_3,
-    line_4,
-    line_5,
-    line_6,
-    line_7,
-    line_8,
-    line_9,
-    line_10,
-    line_11,
-    line_12
+    printer_id: str,
+    line_1: str,
+    line_2: str,
+    line_3: str,
+    line_4: str,
+    line_5: str,
+    line_6: str,
+    line_7: str,
+    line_8: str,
+    line_9: str,
+    line_10: str,
+    line_11: str,
+    line_12: str,
     ) -> str:
     """
     Generate ZPL command for printing special instructions label.
@@ -322,7 +327,7 @@ def generate_special_instructions_label(
     """
 
 
-def generate_dry_label(printer_id) -> str:
+def generate_dry_label(printer_id: str) -> str:
     """
     Generate ZPL command for printing DRY label.
 
