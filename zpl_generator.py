@@ -1,64 +1,68 @@
 import re
 
-# ZPL generation code
-def generate_zpl(printer_id, batch, item_code, description_line1, description_line2, manufacturer, manufacturer_part_line1, manufacturer_part_line2, warehouse, parent_warehouse, msl, qty, date, user):
+def strip_or_empty(value):
+    """Return stripped value or empty string if None.
+    
+    Args:
+        value (str): The value to strip.
+        
+    Returns:
+        str: The stripped value or empty string if None.
+    """
+    return value.strip() if value is not None else ''
 
-# Sanitize input values and remove any leading/trailing whitespaces
-# Also check if the input values are None and replace them with empty strings before stripping to avoid errors
-    if batch is None:
-        batch = ''
-    else:
-        batch = batch.strip()
 
-    if item_code is None:
-        item_code = ''
-    else:
-        item_code = item_code.strip()
+def generate_zpl(
+    printer_id,
+    batch,
+    item_code,
+    description_line1,
+    description_line2,
+    manufacturer,
+    manufacturer_part_line1,
+    manufacturer_part_line2,
+    warehouse,
+    parent_warehouse,
+    msl,
+    qty,
+    date,
+    user
+    ) -> str:
+    """
+    Generate ZPL command for printing standard batch labels.
 
-    if description_line1 is None:
-        description_line1 = ''
-    else:
-        description_line1 = description_line1.strip()
+    Args:
+        printer_id (str): The printer ID.
+        batch (str): The batch number.
+        item_code (str): The item code.
+        description_line1 (str): The first line of the description.
+        description_line2 (str): The second line of the description.
+        manufacturer (str): The manufacturer.
+        manufacturer_part_line1 (str): The first line of the manufacturer's part number.
+        manufacturer_part_line2 (str): The second line of the manufacturer's part number.
+        warehouse (str): The warehouse.
+        parent_warehouse (str): The parent warehouse.
+        msl (str): The MSL level.
+        qty (str): The quantity.
+        date (str): The date.
+        user (str): The user.
 
-    if description_line2 is None:
-        description_line2 = ''
-    else:
-        description_line2 = description_line2.strip()
+    Returns:
+        str: The ZPL command for printing the standard batch label.
+    """
 
-    if manufacturer is None:
-        manufacturer = ''
-    else:
-        manufacturer = manufacturer.strip()
-
-    if manufacturer_part_line1 is None:
-        manufacturer_part_line1 = ''
-    else:
-        manufacturer_part_line1 = manufacturer_part_line1.strip()
-
-    if manufacturer_part_line2 is None:
-        manufacturer_part_line2 = ''
-    else:
-        manufacturer_part_line2 = manufacturer_part_line2.strip()
-
-    if warehouse is None:
-        warehouse = ''
-    else:
-        warehouse = warehouse.strip()
-
-    if parent_warehouse is None:
-        parent_warehouse = ''
-    else:
-        parent_warehouse = parent_warehouse.strip()
-
-    if msl is None:
-        msl = ''
-    else:
-        msl = msl.strip()
-
-    if user is None:
-        user = ''
-    else:
-        user = user.strip()
+    # Remove leading and trailing spaces
+    batch = strip_or_empty(batch)
+    item_code = strip_or_empty(item_code)
+    description_line1 = strip_or_empty(description_line1)
+    description_line2 = strip_or_empty(description_line2)
+    manufacturer = strip_or_empty(manufacturer)
+    manufacturer_part_line1 = strip_or_empty(manufacturer_part_line1)
+    manufacturer_part_line2 = strip_or_empty(manufacturer_part_line2)
+    warehouse = strip_or_empty(warehouse)
+    parent_warehouse = strip_or_empty(parent_warehouse)
+    msl = strip_or_empty(msl)
+    user = strip_or_empty(user)
     
     # Check if msl is a single digit or double digit and adjust the box size accordingly
     if len(msl) == 2:
@@ -96,7 +100,7 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
         manufacturer_part_line1 = '' # Leave empty to avoid printing "None" multiple times (will look redundant)
         manufacturer_part_line2 = '' # Leave empty to avoid printing "None" multiple times (will look redundant)
 
-    # Generate the ZPL string...
+    # Return the ZPL command
     return f"""
     ^XA
 
@@ -154,10 +158,22 @@ def generate_zpl(printer_id, batch, item_code, description_line1, description_li
     ^XZ
     """
 
-# ZPL generation code for MSL Sticker
-def generate_msl_sticker(printer_id, msl, date, time):
 
-    # Trim MSL value
+def generate_msl_sticker(printer_id, msl, date, time):
+    """
+    Generate ZPL command for printing MSL stickers.
+
+    Args:
+        printer_id (str): The printer ID.
+        msl (str): The MSL level.
+        date (str): The date.
+        time (str): The time.
+
+    Returns:
+        str: The ZPL command for printing the MSL sticker.
+    """
+
+    # Remove the "MSL " prefix because this is already in the ZPL command
     msl = msl.replace('MSL ', '')
 
     # Update the mounting time based on the MSL level
@@ -184,7 +200,7 @@ def generate_msl_sticker(printer_id, msl, date, time):
     else:
         msl_print = f"^CF0,80^FO285,30^FD{msl}^FS"
 
-    # Generate the ZPL string...
+    # Return the ZPL command
     return f"""
     ^XA
 
@@ -233,8 +249,46 @@ def generate_msl_sticker(printer_id, msl, date, time):
     """
 
 
-# ZPL generation code for Special Instructions
-def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line_4, line_5, line_6, line_7, line_8, line_9, line_10, line_11, line_12):
+def generate_special_instructions_label(
+    printer_id,
+    line_1,
+    line_2,
+    line_3,
+    line_4,
+    line_5,
+    line_6,
+    line_7,
+    line_8,
+    line_9,
+    line_10,
+    line_11,
+    line_12
+    ) -> str:
+    """
+    Generate ZPL command for printing special instructions label.
+
+    Note: The special instructions are split into multiple lines (maximum 12 lines)
+    by the frontend.
+
+    Args:
+        printer_id (str): The printer ID.
+        line_1 (str): The first line of special instructions.
+        line_2 (str): The second line of special instructions.
+        line_3 (str): The third line of special instructions.
+        line_4 (str): The fourth line of special instructions.
+        line_5 (str): The fifth line of special instructions.
+        line_6 (str): The sixth line of special instructions.
+        line_7 (str): The seventh line of special instructions.
+        line_8 (str): The eighth line of special instructions.
+        line_9 (str): The ninth line of special instructions.
+        line_10 (str): The tenth line of special instructions.
+        line_11 (str): The eleventh line of special instructions.
+        line_12 (str): The twelfth line of special instructions.
+
+    Returns:
+        str: The ZPL command for printing the special instructions label.
+    """
+
     return f"""
     ^XA
 
@@ -268,10 +322,19 @@ def generate_special_instructions_label(printer_id, line_1, line_2, line_3, line
     """
 
 
-# ZPL generation code for DRY label
-def generate_dry_label(printer_id):
+def generate_dry_label(printer_id) -> str:
+    """
+    Generate ZPL command for printing DRY label.
 
-    # Generate the ZPL string...
+    Note: There are no variables because the details will be filled in by the users.
+
+    Args:
+        printer_id (str): The printer ID.
+
+    Returns:
+        str: The ZPL command for printing the DRY label.
+    """
+
     return """
     ^XA
 
@@ -307,7 +370,14 @@ def generate_dry_label(printer_id):
 
 
 def validate_serial_number(serial: str) -> bool:
-    """Validate serial number format and length for Code128 barcode."""
+    """Validate serial number format and length for Code128 barcode.
+    
+    Args:
+        serial (str): The serial number to validate.
+        
+    Returns:
+        bool: True if the serial number is valid, False otherwise.
+    """
     # Check format matches pattern: 5 digits-11 digits
     if not re.match(r'^\d{5}-\d{11}$', serial):
         raise ValueError("Serial number must be in format: XXXXX-XXXXXXXXXXX")
@@ -325,22 +395,81 @@ def generate_tracescan_label(
     hw_version: str,
     sw_version: str,
     standard_indicator: str,
-    wo_serial_number: str
-):
+    wo_serial_number: str,
+    ginv_description: str,
+    ginv_serial: str,
+    ioca_description: str,
+    ioca_serial: str,
+    mcua_description: str,
+    mcua_serial: str,
+    lcda_description: str,
+    lcda_serial: str,
+    ) -> str:
+    """
+    Generate ZPL command for printing tracescan label.
+
+    Args:
+        printer_id (str): The printer ID.
+        hw_version (str): The hardware version.
+        sw_version (str): The software version.
+        standard_indicator (str): The standard indicator.
+        wo_serial_number (str): The work order serial number.
+        ginv_description (str): The ginv description.
+        ginv_serial (str): The ginv serial.
+        ioca_description (str): The ioca description.
+        ioca_serial (str): The ioca serial.
+        mcua_description (str): The mcua description.
+        mcua_serial (str): The mcua serial.
+        lcda_description (str): The lcda description.
+        lcda_serial (str): The lcda serial.
+
+    Returns:
+        str: The ZPL command for printing the tracescan label.
+    """
+    # Validate serial number
     validate_serial_number(wo_serial_number)
+
+    # Change "GaN Inverter" to "GINV" to protect confidential customer information
+    ginv_description = ginv_description.replace("GaN Inverter", "GINV")
+
+    # Strip leading and trailing spaces and replace dashes with spaces
+    ginv_description = ginv_description.strip().replace("-", " ").upper()
+    ioca_description = ioca_description.strip().replace("-", " ").upper()
+    mcua_description = mcua_description.strip().replace("-", " ").upper()
+    lcda_description = lcda_description.strip().replace("-", " ").upper()
 
     return f"""
     ^XA
 
     ^FX Item Description
-    ^CFB,20
-    ^FO45,25^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
+    ^CFP,30,30
+    ^FO60,20^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
 
     ^FX Code128 with WO Serial Number
     ^BY2,3,10
-    ^FO60,90
-    ^BCN,80,Y,Y,N
+    ^FO60,65
+    ^BCN,80,Y,N,N
     ^FD{wo_serial_number}^FS
+
+    ^FX GINV Details
+    ^CFP,15
+    ^FO60,185^FD{ginv_description}^FS
+    ^FO60,205^FD{ginv_serial}^FS
+
+    ^FX IOCA Details
+    ^CFP,15
+    ^FO60,225^FD{ioca_description}^FS
+    ^FO60,245^FD{ioca_serial}^FS
+
+    ^FX MCUA Details
+    ^CFP,15
+    ^FO330,185^FD{mcua_description}^FS
+    ^FO330,205^FD{mcua_serial}^FS
+
+    ^FX LCDA Details
+    ^CFP,15
+    ^FO330,225^FD{lcda_description}^FS
+    ^FO330,245^FD{lcda_serial}^FS
 
     ^XZ
     """
