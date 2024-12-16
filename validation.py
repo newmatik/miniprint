@@ -80,6 +80,14 @@ TRACESCAN_VALIDATOR = RequestValidator([
     ValidationRule("sw_version"),
     ValidationRule("standard_indicator"),
     ValidationRule("wo_serial_number"),
+    ValidationRule("ginv_description"),
+    ValidationRule("ginv_serial"),
+    ValidationRule("ioca_description"),
+    ValidationRule("ioca_serial"),
+    ValidationRule("mcua_description"),
+    ValidationRule("mcua_serial"),
+    ValidationRule("lcda_description"),
+    ValidationRule("lcda_serial"),
 ])
 
 # Request validation functions with improved type hints
