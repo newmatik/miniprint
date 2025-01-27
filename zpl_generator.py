@@ -103,6 +103,7 @@ def generate_zpl(
     # Return the ZPL command
     return f"""
     ^XA
+    ^CI28
 
     ^FO280,10
     ^BQN,2,5,H
@@ -208,6 +209,7 @@ def generate_msl_sticker(
     # Return the ZPL command
     return f"""
     ^XA
+    ^CI28
 
     ^FX Large Text MSL
     ^CF0,80^FO85,30^FDMSL^FS
@@ -296,6 +298,7 @@ def generate_special_instructions_label(
 
     return f"""
     ^XA
+    ^CI28
 
     ^FX Bounding Box
     ^FO10,10^GB380,380,1,B,0^FS
@@ -342,6 +345,7 @@ def generate_dry_label(printer_id: str) -> str:
 
     return """
     ^XA
+    ^CI28
 
     ^FX Large Text DRY
     ^CF0,90^FO140,30^FDDRY^FS
@@ -445,6 +449,7 @@ def generate_tracescan_label(
 
     return f"""
     ^XA
+    ^CI28
 
     ^FX Item Description
     ^CFP,30,30
