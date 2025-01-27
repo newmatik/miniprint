@@ -30,6 +30,7 @@ def generate_zpl(
     ) -> str:
     """
     Generate ZPL command for printing standard batch labels.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Args:
         printer_id (str): The printer ID.
@@ -168,6 +169,7 @@ def generate_msl_sticker(
     ) -> str:
     """
     Generate ZPL command for printing MSL stickers.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Args:
         printer_id (str): The printer ID.
@@ -273,6 +275,7 @@ def generate_special_instructions_label(
     ) -> str:
     """
     Generate ZPL command for printing special instructions label.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Note: The special instructions are split into multiple lines (maximum 12 lines)
     by the frontend.
@@ -333,6 +336,7 @@ def generate_special_instructions_label(
 def generate_dry_label(printer_id: str) -> str:
     """
     Generate ZPL command for printing DRY label.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Note: There are no variables because the details will be filled in by the users.
 
@@ -416,6 +420,7 @@ def generate_tracescan_label(
     ) -> str:
     """
     Generate ZPL command for printing tracescan label.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Args:
         printer_id (str): The printer ID.
