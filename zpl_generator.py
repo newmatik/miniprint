@@ -30,6 +30,7 @@ def generate_zpl(
     ) -> str:
     """
     Generate ZPL command for printing standard batch labels.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Args:
         printer_id (str): The printer ID.
@@ -103,6 +104,7 @@ def generate_zpl(
     # Return the ZPL command
     return f"""
     ^XA
+    ^CI28
 
     ^FO280,10
     ^BQN,2,5,H
@@ -167,6 +169,7 @@ def generate_msl_sticker(
     ) -> str:
     """
     Generate ZPL command for printing MSL stickers.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Args:
         printer_id (str): The printer ID.
@@ -208,6 +211,7 @@ def generate_msl_sticker(
     # Return the ZPL command
     return f"""
     ^XA
+    ^CI28
 
     ^FX Large Text MSL
     ^CF0,80^FO85,30^FDMSL^FS
@@ -271,6 +275,7 @@ def generate_special_instructions_label(
     ) -> str:
     """
     Generate ZPL command for printing special instructions label.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Note: The special instructions are split into multiple lines (maximum 12 lines)
     by the frontend.
@@ -296,6 +301,7 @@ def generate_special_instructions_label(
 
     return f"""
     ^XA
+    ^CI28
 
     ^FX Bounding Box
     ^FO10,10^GB380,380,1,B,0^FS
@@ -330,6 +336,7 @@ def generate_special_instructions_label(
 def generate_dry_label(printer_id: str) -> str:
     """
     Generate ZPL command for printing DRY label.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Note: There are no variables because the details will be filled in by the users.
 
@@ -342,6 +349,7 @@ def generate_dry_label(printer_id: str) -> str:
 
     return """
     ^XA
+    ^CI28
 
     ^FX Large Text DRY
     ^CF0,90^FO140,30^FDDRY^FS
@@ -412,6 +420,7 @@ def generate_tracescan_label(
     ) -> str:
     """
     Generate ZPL command for printing tracescan label.
+    Uses UTF-8 encoding (^CI28) to support German characters.
 
     Args:
         printer_id (str): The printer ID.
@@ -445,6 +454,7 @@ def generate_tracescan_label(
 
     return f"""
     ^XA
+    ^CI28
 
     ^FX Item Description
     ^CFP,30,30
