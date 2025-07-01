@@ -488,3 +488,70 @@ def generate_tracescan_label(
 
     ^XZ
     """
+
+
+def generate_svt_fortlox_label(
+    printer_id: str,
+    sv_article_no: str,
+    phib: str = "PHIB",
+    serial_no: str,
+    fw_version: str,
+    phia: str = "PHIA",
+    phii: str = "PHII",
+    run_date: str,
+    ) -> str:
+    """
+    Generate ZPL command for printing SVT Fortlox label.
+    The dynamic data comes from the Laser.
+    Uses UTF-8 encoding (^CI28) to support German characters.
+
+    Args:
+        printer_id (str): The printer ID.
+        sv_article_no (str): Customer SVT's article number.
+        phib (str): PHIB (For now hardcoded to "PHIB")
+        serial_no (str): The serial number.
+        fw_version (str): The firmware version.
+        phia (str): PHIA (For now hardcoded to "PHIA")
+        phii (str): PHII (For now hardcoded to "PHII")
+        run_date (str): The run date.
+
+    Returns:
+        str: The ZPL command for printing the tracescan label.
+    """
+
+    datamatrix_data = f"{sv_article_no}|{phib}|{serial_no}|{fw_version}|{phia}|||{phii}|||"
+
+    return f"""
+    ^XA
+
+    ^FX SV-ArtikelNr
+    ^CF J,20
+    ^FO 20,20
+    ^FD{sv_article_no}^FS
+
+    ^FX FORTLOX Key Text
+    ^CF J,26
+    ^FO 20,60
+    ^FDFORTLOX Key^FS
+
+    ^FX DataMatrixCode ECC Typ 200
+    ^FO 210,60
+    ^BX N,4,200
+    ^FD{datamatrix_data}^FS
+
+    ^FX Vertical Line
+    ^FO 360,0
+    ^GB 1,240,1,B^FS
+
+    ^FX FW-Version
+    ^FO 380,50
+    ^A JB,24,24
+    ^FDFW: {fw_version}^FS
+
+    ^FX Run Date
+    ^FO 430,55
+    ^A JB,24,24
+    ^FDDATE: {run_date}^FS
+
+    ^XZ
+    """
