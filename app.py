@@ -6,8 +6,8 @@ import os
 import logging
 from dotenv import load_dotenv
 from printers import printers
-from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label
-from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request
+from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label
+from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request
 
 # Load environment variables
 load_dotenv()
@@ -27,6 +27,7 @@ def require_apikey(f):
             return {'error': 'Invalid API key'}, 403
         return f(*args, **kwargs)
     return decorated_function
+
 
 # Common printer communication mixin
 class PrinterCommunicationMixin:
@@ -52,12 +53,14 @@ class PrinterCommunicationMixin:
             raise ValueError('Printer ID not found')
         return printer
 
+
 class PrinterList(Resource):
     method_decorators = [require_apikey]
 
     def get(self):
         logging.debug(request.headers)
         return printers
+
 
 class PrinterStatus(Resource):
     method_decorators = [require_apikey]
@@ -83,6 +86,7 @@ class PrinterStatus(Resource):
                 logging.warning(f"Failed to connect to {printer_ip}:{printer_port} - {e}")
                 return False
 
+
 class PrintLabel(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
@@ -104,6 +108,7 @@ class PrintLabel(Resource, PrinterCommunicationMixin):
         except Exception as e:
             logging.error(f"Error in PrintLabel: {str(e)}")
             return {'error': str(e)}, 500
+
 
 class PrintMsl(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
@@ -127,6 +132,7 @@ class PrintMsl(Resource, PrinterCommunicationMixin):
             logging.error(f"Error in PrintMsl: {str(e)}")
             return {'error': str(e)}, 500
 
+
 class PrintSpecialInstructions(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
@@ -148,6 +154,7 @@ class PrintSpecialInstructions(Resource, PrinterCommunicationMixin):
         except Exception as e:
             logging.error(f"Error in PrintSpecialInstructions: {str(e)}")
             return {'error': str(e)}, 500
+
 
 class PrintDry(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
@@ -171,6 +178,7 @@ class PrintDry(Resource, PrinterCommunicationMixin):
             logging.error(f"Error in PrintDry: {str(e)}")
             return {'error': str(e)}, 500
 
+
 class PrintTracescanLabel(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
@@ -193,10 +201,35 @@ class PrintTracescanLabel(Resource, PrinterCommunicationMixin):
             logging.error(f"Error in PrintTracescanLabel: {str(e)}")
             return {'error': str(e)}, 500
 
+
+class PrintSvtFortloxLabel(Resource, PrinterCommunicationMixin):
+    method_decorators = [require_apikey]
+
+    def post(self):
+        try:
+            errors = validate_svt_fortlox_request(request.json)
+            if errors:
+                return {'errors': errors}, 400
+
+            data = request.json
+            printer = self.get_printer_info(data['printer_id'])
+            
+            print_command = generate_svt_fortlox_label(**data)
+            self.send_zpl_to_printer(printer['ip'], printer['port'], print_command)
+            
+            return {'message': 'SVT Fortlox label sent to printer successfully'}
+        except ValueError as e:
+            return {'error': str(e)}, 404
+        except Exception as e:
+            logging.error(f"Error in PrintSvtFortloxLabel: {str(e)}")
+            return {'error': str(e)}, 500
+
+
 class HelloWorld(Resource):
     def get(self):
         return {'message': 'miniprint api'}
-    
+
+
 class Ping(Resource):
     def get(self):
         return {'message': 'pong'}
@@ -211,6 +244,7 @@ api.add_resource(PrintMsl, '/print/msl')
 api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
 api.add_resource(PrintDry, '/print/dry')
 api.add_resource(PrintTracescanLabel, '/print/tracescan')
+api.add_resource(PrintSvtFortloxLabel, '/print/svt-fortlox')
 
 if __name__ == '__main__':
     app.run(

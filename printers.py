@@ -7,5 +7,5 @@ printers = {
     'prt-batch-WE3': {'ip': '10.1.0.27', 'port': 9100},
     'prt-batch-WE4': {'ip': '10.1.0.28', 'port': 9100},
     'prt-label-CDS': {'ip': '10.1.0.53', 'port': 9100},
-    # Add more printers as needed
+    'prt-label-SVT': {'ip': '10.1.0.53', 'port': 9100},  # Use same as CDS for now until we have a dedicated printer (for testing purposes)
 }
