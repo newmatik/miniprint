@@ -90,6 +90,14 @@ TRACESCAN_VALIDATOR = RequestValidator([
     ValidationRule("lcda_serial"),
 ])
 
+SVT_FORTLOX_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id"),
+    ValidationRule("sv_article_no"),
+    ValidationRule("serial_no"),
+    ValidationRule("fw_version"),
+    ValidationRule("run_date"),
+])
+
 # Request validation functions with improved type hints
 def validate_request(data: Dict[str, Any]) -> List[str]:
     """Validate standard print request"""
@@ -110,3 +118,7 @@ def validate_dry_request(data: Dict[str, Any]) -> List[str]:
 def validate_tracescan_request(data: Dict[str, Any]) -> List[str]:
     """Validate Tracescan Label print request"""
     return TRACESCAN_VALIDATOR.validate(data)
+
+def validate_svt_fortlox_request(data: Dict[str, Any]) -> List[str]:
+    """Validate SVT Fortlox print request"""
+    return SVT_FORTLOX_VALIDATOR.validate(data)

@@ -493,11 +493,8 @@ def generate_tracescan_label(
 def generate_svt_fortlox_label(
     printer_id: str,
     sv_article_no: str,
-    phib: str = "PHIB",
     serial_no: str,
     fw_version: str,
-    phia: str = "PHIA",
-    phii: str = "PHII",
     run_date: str,
     ) -> str:
     """
@@ -507,17 +504,17 @@ def generate_svt_fortlox_label(
     Args:
         printer_id (str): The printer ID.
         sv_article_no (str): Customer SVT's article number.
-        phib (str): PHIB (For now hardcoded to "PHIB")
         serial_no (str): The serial number.
         fw_version (str): The firmware version.
-        phia (str): PHIA (For now hardcoded to "PHIA")
-        phii (str): PHII (For now hardcoded to "PHII")
         run_date (str): The run date.
 
     Returns:
         str: The ZPL command for printing the SVT Fortlox label.
     """
 
+    phib = "PHIB"
+    phia = "PHIA"
+    phii = "PHII"
     datamatrix_data = f"{sv_article_no}|{phib}|{serial_no}|{fw_version}|{phia}|||{phii}|||"
 
     return f"""
