@@ -28,6 +28,7 @@ def require_apikey(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 # Common printer communication mixin
 class PrinterCommunicationMixin:
     def send_zpl_to_printer(self, printer_ip, printer_port, zpl_data):
@@ -52,12 +53,14 @@ class PrinterCommunicationMixin:
             raise ValueError('Printer ID not found')
         return printer
 
+
 class PrinterList(Resource):
     method_decorators = [require_apikey]
 
     def get(self):
         logging.debug(request.headers)
         return printers
+
 
 class PrinterStatus(Resource):
     method_decorators = [require_apikey]
@@ -83,6 +86,7 @@ class PrinterStatus(Resource):
                 logging.warning(f"Failed to connect to {printer_ip}:{printer_port} - {e}")
                 return False
 
+
 class PrintLabel(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
@@ -104,6 +108,7 @@ class PrintLabel(Resource, PrinterCommunicationMixin):
         except Exception as e:
             logging.error(f"Error in PrintLabel: {str(e)}")
             return {'error': str(e)}, 500
+
 
 class PrintMsl(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
@@ -127,6 +132,7 @@ class PrintMsl(Resource, PrinterCommunicationMixin):
             logging.error(f"Error in PrintMsl: {str(e)}")
             return {'error': str(e)}, 500
 
+
 class PrintSpecialInstructions(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
@@ -148,6 +154,7 @@ class PrintSpecialInstructions(Resource, PrinterCommunicationMixin):
         except Exception as e:
             logging.error(f"Error in PrintSpecialInstructions: {str(e)}")
             return {'error': str(e)}, 500
+
 
 class PrintDry(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
@@ -171,6 +178,7 @@ class PrintDry(Resource, PrinterCommunicationMixin):
             logging.error(f"Error in PrintDry: {str(e)}")
             return {'error': str(e)}, 500
 
+
 class PrintTracescanLabel(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
@@ -192,6 +200,7 @@ class PrintTracescanLabel(Resource, PrinterCommunicationMixin):
         except Exception as e:
             logging.error(f"Error in PrintTracescanLabel: {str(e)}")
             return {'error': str(e)}, 500
+
 
 class PrintSvtFortloxLabel(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
@@ -215,10 +224,12 @@ class PrintSvtFortloxLabel(Resource, PrinterCommunicationMixin):
             logging.error(f"Error in PrintSvtFortloxLabel: {str(e)}")
             return {'error': str(e)}, 500
 
+
 class HelloWorld(Resource):
     def get(self):
         return {'message': 'miniprint api'}
-    
+
+
 class Ping(Resource):
     def get(self):
         return {'message': 'pong'}

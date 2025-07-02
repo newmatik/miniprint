@@ -98,26 +98,31 @@ SVT_FORTLOX_VALIDATOR = RequestValidator([
     ValidationRule("run_date"),
 ])
 
-# Request validation functions with improved type hints
+
 def validate_request(data: Dict[str, Any]) -> List[str]:
     """Validate standard print request"""
     return STANDARD_VALIDATOR.validate(data)
+
 
 def validate_msl_request(data: Dict[str, Any]) -> List[str]:
     """Validate MSL print request"""
     return MSL_VALIDATOR.validate(data)
 
+
 def validate_special_instructions_request(data: Dict[str, Any]) -> List[str]:
     """Validate special instructions print request"""
     return SPECIAL_INSTRUCTIONS_VALIDATOR.validate(data)
+
 
 def validate_dry_request(data: Dict[str, Any]) -> List[str]:
     """Validate DRY print request"""
     return DRY_VALIDATOR.validate(data)
 
+
 def validate_tracescan_request(data: Dict[str, Any]) -> List[str]:
     """Validate Tracescan Label print request"""
     return TRACESCAN_VALIDATOR.validate(data)
+
 
 def validate_svt_fortlox_request(data: Dict[str, Any]) -> List[str]:
     """Validate SVT Fortlox print request"""
