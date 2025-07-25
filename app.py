@@ -6,8 +6,8 @@ import os
 import logging
 from dotenv import load_dotenv
 from printers import printers
-from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label
-from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request
+from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok
+from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok
 
 # Load environment variables
 load_dotenv()
@@ -202,26 +202,26 @@ class PrintTracescanLabel(Resource, PrinterCommunicationMixin):
             return {'error': str(e)}, 500
 
 
-class PrintSvtFortloxLabel(Resource, PrinterCommunicationMixin):
+class PrintSvtFortloxLabelOk(Resource, PrinterCommunicationMixin):
     method_decorators = [require_apikey]
 
     def post(self):
         try:
-            errors = validate_svt_fortlox_request(request.json)
+            errors = validate_svt_fortlox_request_ok(request.json)
             if errors:
                 return {'errors': errors}, 400
 
             data = request.json
             printer = self.get_printer_info(data['printer_id'])
             
-            print_command = generate_svt_fortlox_label(**data)
+            print_command = generate_svt_fortlox_label_ok(**data)
             self.send_zpl_to_printer(printer['ip'], printer['port'], print_command)
             
             return {'message': 'SVT Fortlox label sent to printer successfully'}
         except ValueError as e:
             return {'error': str(e)}, 404
         except Exception as e:
-            logging.error(f"Error in PrintSvtFortloxLabel: {str(e)}")
+            logging.error(f"Error in PrintSvtFortloxLabelOk: {str(e)}")
             return {'error': str(e)}, 500
 
 
@@ -244,7 +244,7 @@ api.add_resource(PrintMsl, '/print/msl')
 api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
 api.add_resource(PrintDry, '/print/dry')
 api.add_resource(PrintTracescanLabel, '/print/tracescan')
-api.add_resource(PrintSvtFortloxLabel, '/print/svt-fortlox')
+api.add_resource(PrintSvtFortloxLabelOk, '/print/svt-fortlox-ok')
 
 if __name__ == '__main__':
     app.run(
