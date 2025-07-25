@@ -217,7 +217,7 @@ class PrintSvtFortloxLabelOk(Resource, PrinterCommunicationMixin):
             print_command = generate_svt_fortlox_label_ok(**data)
             self.send_zpl_to_printer(printer['ip'], printer['port'], print_command)
             
-            return {'message': 'SVT Fortlox label sent to printer successfully'}
+            return {'message': 'SVT Fortlox OK label sent to printer successfully'}
         except ValueError as e:
             return {'error': str(e)}, 404
         except Exception as e:
