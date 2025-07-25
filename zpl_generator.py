@@ -491,7 +491,7 @@ def generate_tracescan_label(
 
 
 def generate_svt_fortlox_label_ok(
-    printer_id: str,
+    printer_id: str = "prt-K-SVT-00028",
     sv_article_no: str,
     serial_no: str,
     fw_version: str,
@@ -562,6 +562,65 @@ def generate_svt_fortlox_label_ok(
     ^FX SV Logo at bottom
     ^FO30,308
     ^GFA,874,874,38,N0F8gQ03KFE,01FFE001F8gQ07LF00F8I0F8,0JFC01F8gQ07LF81FC001FC,1KFgU07LF81FC001FC,3F807FgU07LF80FC001F8,7F003FgU07LF00FE003F8,7FL0F80F83F80FEI07FE001F03F8001FFR07E003F00FFCI03FFI01FF8,7F8J01F81FDFFC7FF001IFC01F9FFE00IFEQ07E007F03IFI0IFC007FFE,3FEJ01FC1NF807JF01KF03FC7FQ03F007E0JFC03F8FF01FC7F8,1FFEI01FC1FF8FFE3FC0FE07F81FF87F03F00E007LF003F00FE1FC0FE07F01E03F007,0IFC001FC1FE07FC1FC1FC01F81FE03F83FK07LF801F80FC3F807F07EJ03F,01IFC01FC1FC07F00FC1F801FC1F803F83F8J07LF801F80FC7F003F87FJ03F8,001IF01FC1F807F00FC3F800FC1F801F83FFCI07LFI0FC1F87E001F83FF8001FFC,I07FF81FC1F807F00FC3F800FC1F801F80IFCR0FC1F87E001F81IF800IFC,J07FC1FC1F807F00FC3F800FC1F801F803IF8Q0FC1F07E001F807IF003IF8,J01FC1FC1F807F00FC3F800FC1F801F8I0FFCQ07E3F07E001F8001FF8I0FFC,J01FC1FC1F807F00FC3F800FC1F801F8I01FC03LFI07E3E07E003F8I03FCI01FE,1C001FC1FC1F807F00FC1F801FC1F801F8J0FE07LF8003E7E07F003F8I01FCJ0FE,7F003F81FC1F807F00FC1FC03F81F801F8J0FC03KFEI01FFC03F807FJ01FCJ0FE,3FC0FF01FC1F807F00FC0FF07F01F801F81F01FCQ01FFC01FC0FE03E01F81F00FC,1JFE01FC1F807F00FC07IFE01F801F81JF8Q01FF800JFC03JF01JF8,07IF800F80F803E00FC01IF801F801F807FFES0FF8003IFI0IFC007FFE,00FFCI07S03FCP01FFI07LFJ07EJ07F8I01FEJ0FF,^FS
+
+    ^XZ
+    """
+
+
+def generate_svt_fortlox_label_nok(
+    printer_id: str = "prt-K-SVT-00029",
+    sv_article_no: str,
+    error_code: str,
+    error_date: str,
+    error_time: str,
+    frequency_tolerance: str,
+    serial_no: str,
+) -> str:
+    """
+    Generate ZPL command for printing error codes for the SVT Fortlox label.
+    The dynamic data comes from the Laser.
+
+    Args:
+        printer_id (str): The printer ID.
+        sv_article_no (str): Customer SVT's article number.
+        error_code (str): The error code.
+        error_date (str): The error date.
+        error_time (str): The error time.
+        frequency_tolerance (str): The frequency tolerance.
+        serial_no (str): The serial number.
+
+    Returns:
+        str: The ZPL command for printing the error codes for the SVT Fortlox label.
+    """
+
+    return f"""
+    ^XA
+    ^CI28
+
+    ^FX SV-ArtikelNr
+    ^CFB,20
+    ^FO30,30
+    ^FD{sv_article_no}^FS
+
+    ^FX Error Code
+    ^CFB,20
+    ^FO30,80
+    ^FDError Code: {error_code}^FS
+
+    ^FX Date and Time
+    ^CFJ,30
+    ^FO30,130
+    ^FDDate (Time): {error_date} ({error_time})^FS
+
+    ^FX PPM
+    ^CFJ,30
+    ^FO30,190
+    ^FDFrequency Tolerance: {frequency_tolerance} ppm^FS
+
+    ^FX Serial Number
+    ^CFJ,30
+    ^FO30,250
+    ^FDSerial: {serial_no}^FS
 
     ^XZ
     """

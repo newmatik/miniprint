@@ -6,8 +6,8 @@ import os
 import logging
 from dotenv import load_dotenv
 from printers import printers
-from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok
-from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok
+from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok, generate_svt_fortlox_label_nok
+from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok, validate_svt_fortlox_request_nok
 
 # Load environment variables
 load_dotenv()
@@ -225,6 +225,29 @@ class PrintSvtFortloxLabelOk(Resource, PrinterCommunicationMixin):
             return {'error': str(e)}, 500
 
 
+class PrintSvtFortloxLabelNok(Resource, PrinterCommunicationMixin):
+    method_decorators = [require_apikey]
+
+    def post(self):
+        try:
+            errors = validate_svt_fortlox_request_nok(request.json)
+            if errors:
+                return {'errors': errors}, 400
+
+            data = request.json
+            printer = self.get_printer_info(data['printer_id'])
+            
+            print_command = generate_svt_fortlox_label_nok(**data)
+            self.send_zpl_to_printer(printer['ip'], printer['port'], print_command)
+            
+            return {'message': 'SVT Fortlox NOK label sent to printer successfully'}
+        except ValueError as e:
+            return {'error': str(e)}, 404
+        except Exception as e:
+            logging.error(f"Error in PrintSvtFortloxLabelNok: {str(e)}")
+            return {'error': str(e)}, 500
+
+
 class HelloWorld(Resource):
     def get(self):
         return {'message': 'miniprint api'}
@@ -245,6 +268,7 @@ api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
 api.add_resource(PrintDry, '/print/dry')
 api.add_resource(PrintTracescanLabel, '/print/tracescan')
 api.add_resource(PrintSvtFortloxLabelOk, '/print/svt-fortlox-ok')
+api.add_resource(PrintSvtFortloxLabelNok, '/print/svt-fortlox-nok')
 
 if __name__ == '__main__':
     app.run(

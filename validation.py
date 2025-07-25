@@ -98,6 +98,16 @@ SVT_FORTLOX_OK_VALIDATOR = RequestValidator([
     ValidationRule("run_date"),
 ])
 
+SVT_FORTLOX_NOK_VALIDATOR = RequestValidator([
+    ValidationRule("printer_id"),
+    ValidationRule("sv_article_no"),
+    ValidationRule("error_code"),
+    ValidationRule("error_date"),
+    ValidationRule("error_time"),
+    ValidationRule("frequency_tolerance"),
+    ValidationRule("serial_no"),
+])
+
 
 def validate_request(data: Dict[str, Any]) -> List[str]:
     """Validate standard print request"""
@@ -127,3 +137,8 @@ def validate_tracescan_request(data: Dict[str, Any]) -> List[str]:
 def validate_svt_fortlox_request_ok(data: Dict[str, Any]) -> List[str]:
     """Validate SVT Fortlox OK print request"""
     return SVT_FORTLOX_OK_VALIDATOR.validate(data)
+
+
+def validate_svt_fortlox_request_nok(data: Dict[str, Any]) -> List[str]:
+    """Validate SVT Fortlox NOK print request"""
+    return SVT_FORTLOX_NOK_VALIDATOR.validate(data)
