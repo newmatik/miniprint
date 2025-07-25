@@ -491,7 +491,7 @@ def generate_tracescan_label(
 
 
 def generate_svt_fortlox_label_ok(
-    printer_id: str = "prt-K-SVT-00028",
+    printer_id: str,
     sv_article_no: str,
     serial_no: str,
     fw_version: str,
@@ -568,7 +568,7 @@ def generate_svt_fortlox_label_ok(
 
 
 def generate_svt_fortlox_label_nok(
-    printer_id: str = "prt-K-SVT-00029",
+    printer_id: str,
     sv_article_no: str,
     error_code: str,
     error_date: str,
