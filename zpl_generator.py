@@ -546,18 +546,18 @@ def generate_svt_fortlox_label_ok(
     ^FD{datamatrix_data}^FS
 
     ^FX Vertical Line
-    ^FO540,0
+    ^FO564,0
     ^GB1,360,1,B^FS
 
     ^FX FW-Version
-    ^FO570,75
+    ^FO595,75
     ^ANB,36,36
-    ^FDFW: {fw_version}^FS
+    ^FDFW: 1.2.1312^FS
 
     ^FX Run Date
-    ^FO645,83
+    ^FO655,83
     ^ANB,36,36
-    ^FDDATE: {run_date}^FS
+    ^FDDATE: 07/02^FS
 
     ^FX SV Logo at bottom
     ^FO30,308
