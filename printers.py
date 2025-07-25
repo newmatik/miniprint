@@ -7,6 +7,7 @@ printers = {
     'prt-batch-WE3': {'ip': '10.1.0.27', 'port': 9100},
     'prt-batch-WE4': {'ip': '10.1.0.28', 'port': 9100},
     'prt-label-CDS': {'ip': '10.1.0.53', 'port': 9100},
-    'prt-label-SVT': {'ip': '10.1.0.53', 'port': 9100},  # Use same as CDS for now until we have a dedicated printer (for testing purposes)
+    'prt-K-SVT-00028': {'ip': '10.1.0.56', 'port': 9100},  # SVT "test ok" label (60x30mm)
+    'prt-K-SVT-00029': {'ip': '10.1.0.57', 'port': 9100},  # SVT "not ok" label (51x25mm, removable)
     'prt-batch-RO1': {'ip': '192.168.120.9', 'port': 9100},
 }
