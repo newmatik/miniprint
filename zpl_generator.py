@@ -598,18 +598,18 @@ def generate_svt_fortlox_label_nok(
     ^CI28
 
     ^FX SV-ArtikelNr
-    ^CFB,20
-    ^FO30,30
+    ^CFB,25
+    ^FO30,40
     ^FD{sv_article_no}^FS
 
     ^FX Error Code
-    ^CFB,20
-    ^FO30,80
+    ^CFB,25
+    ^FO30,90
     ^FDError Code: {error_code}^FS
 
     ^FX Date and Time
     ^CFJ,30
-    ^FO30,130
+    ^FO30,140
     ^FDDate (Time): {error_date} ({error_time})^FS
 
     ^FX PPM
@@ -619,7 +619,7 @@ def generate_svt_fortlox_label_nok(
 
     ^FX Serial Number
     ^CFJ,30
-    ^FO30,250
+    ^FO30,240
     ^FDSerial: {serial_no}^FS
 
     ^XZ
