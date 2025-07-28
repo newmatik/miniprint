@@ -544,10 +544,6 @@ def generate_svt_fortlox_label_ok(
     ^BXN,6,200
     ^FD{datamatrix_data}^FS
 
-    ^FX Vertical Line
-    ^FO564,0
-    ^GB1,360,3,B^FS
-
     ^FX FW-Version (rotated Arial Bold)
     ^FO595,120
     ^A@B,26,26,E:71028264.TTF
