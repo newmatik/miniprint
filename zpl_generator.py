@@ -548,25 +548,15 @@ def generate_svt_fortlox_label_ok(
     ^FO564,0
     ^GB1,360,1,B^FS
 
-    ^FX FW-Version Label (rotated Arial)
-    ^FO690,55
-    ^A@L,26,26,E:71028264.TTF
-    ^FDFW:^FS
+    ^FX FW-Version (rotated Arial)
+    ^FO595,75
+    ^A@L,26,26,E:85620388.TTF
+    ^FDFW: {fw_version}^FS
 
-    ^FX FW-Version Value (rotated Arial Bold)
-    ^FO720,55
-    ^A@L,26,26,E:71028264.TTF
-    ^FD{fw_version}^FS
-
-    ^FX Run Date Label (rotated Arial)
-    ^FO690,150
-    ^A@L,26,26,E:71028264.TTF
-    ^FDDATE:^FS
-
-    ^FX Run Date Value (rotated Arial Bold)
-    ^FO720,150
-    ^A@L,26,26,E:71028264.TTF
-    ^FD{run_date}^FS
+    ^FX Run Date (rotated Arial)
+    ^FO655,83
+    ^A@L,26,26,E:85620388.TTF
+    ^FDDATE: {run_date}^FS
 
     ^FX SV Logo at bottom
     ^FO30,308
