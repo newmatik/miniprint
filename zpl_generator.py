@@ -599,27 +599,27 @@ def generate_svt_fortlox_label_nok(
 
     ^FX SV Article No (Arial Bold)
     ^FO30,20
-    ^A@N,28,28,E:71028264.TTF
+    ^A@N,24,24,E:71028264.TTF
     ^FD{sv_article_no}^FS
 
     ^FX Error Code (Arial Bold)
-    ^FO30,70
-    ^A@N,28,28,E:71028264.TTF
+    ^FO30,60
+    ^A@N,24,24,E:71028264.TTF
     ^FDERROR CODE: {error_code}^FS
 
     ^FX Date & Time (Arial Regular)
-    ^FO30,120
-    ^A@N,24,24,E:85620388.TTF
+    ^FO30,100
+    ^A@N,20,20,E:85620388.TTF
     ^FDDate (Time): {error_date} ({error_time})^FS
 
     ^FX Frequency Tolerance (Arial Regular)
-    ^FO30,165
-    ^A@N,24,24,E:85620388.TTF
+    ^FO30,140
+    ^A@N,20,20,E:85620388.TTF
     ^FDFrequency Tolerance: {frequency_tolerance} ppm^FS
 
     ^FX Serial No (Arial Regular)
-    ^FO30,210
-    ^A@N,24,24,E:85620388.TTF
+    ^FO30,180
+    ^A@N,20,20,E:85620388.TTF
     ^FDSerial: {serial_no}^FS
 
     ^XZ
