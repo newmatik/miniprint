@@ -599,12 +599,12 @@ def generate_svt_fortlox_label_nok(
 
     ^FX SV Article No (Arial Bold)
     ^FO30,20
-    ^A@N,24,24,E:71028264.TTF
+    ^A@N,21,21,E:71028264.TTF
     ^FD{sv_article_no}^FS
 
     ^FX Error Code (Arial Bold)
     ^FO30,60
-    ^A@N,24,24,E:71028264.TTF
+    ^A@N,21,21,E:71028264.TTF
     ^FDERROR CODE: {error_code}^FS
 
     ^FX Date & Time (Arial Regular)
