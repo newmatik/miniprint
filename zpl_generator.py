@@ -522,7 +522,7 @@ def generate_svt_fortlox_label_ok(
     ^CI28
 
     ^FX SV-ArtikelNr (Arial Bold)
-    ^FO30,30
+    ^FO30,50
     ^A@N,30,30,E:71028264.TTF
     ^FD{sv_article_no}^FS
 
@@ -549,23 +549,23 @@ def generate_svt_fortlox_label_ok(
     ^GB1,360,1,B^FS
 
     ^FX FW-Version Label (rotated Arial)
-    ^FO595,205
-    ^A@R,26,26,E:71028264.TTF
+    ^FO690,55
+    ^A@L,26,26,E:71028264.TTF
     ^FDFW:^FS
 
     ^FX FW-Version Value (rotated Arial Bold)
-    ^FO670,205
-    ^A@R,26,26,E:71028264.TTF
+    ^FO720,55
+    ^A@L,26,26,E:71028264.TTF
     ^FD{fw_version}^FS
 
     ^FX Run Date Label (rotated Arial)
-    ^FO730,205
-    ^A@R,26,26,E:71028264.TTF
+    ^FO690,150
+    ^A@L,26,26,E:71028264.TTF
     ^FDDATE:^FS
 
     ^FX Run Date Value (rotated Arial Bold)
-    ^FO730,205
-    ^A@R,26,26,E:71028264.TTF
+    ^FO720,150
+    ^A@L,26,26,E:71028264.TTF
     ^FD{run_date}^FS
 
     ^FX SV Logo at bottom
