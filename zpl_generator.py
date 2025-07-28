@@ -597,29 +597,24 @@ def generate_svt_fortlox_label_nok(
     ^XA
     ^CI28
 
-    ^FX SV-ArtikelNr
-    ^CFB,25
-    ^FO30,40
+    ^FO30,30
+    ^A@N,35,35,E:FONTXB.FNT
     ^FD{sv_article_no}^FS
 
-    ^FX Error Code
-    ^CFB,25
-    ^FO30,90
-    ^FDError Code: {error_code}^FS
+    ^FO30,80
+    ^A@N,35,35,E:FONTWB.FNT
+    ^FDERROR CODE: {error_code}^FS
 
-    ^FX Date and Time
-    ^CFJ,30
-    ^FO30,140
+    ^FO30,130
+    ^A@N,30,30,E:FONTXL.FNT
     ^FDDate (Time): {error_date} ({error_time})^FS
 
-    ^FX PPM
-    ^CFJ,30
-    ^FO30,190
+    ^FO30,170
+    ^A@N,30,30,E:FONTXL.FNT
     ^FDFrequency Tolerance: {frequency_tolerance} ppm^FS
 
-    ^FX Serial Number
-    ^CFJ,30
-    ^FO30,240
+    ^FO30,210
+    ^A@N,30,30,E:FONTXL.FNT
     ^FDSerial: {serial_no}^FS
 
     ^XZ
