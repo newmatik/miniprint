@@ -546,15 +546,15 @@ def generate_svt_fortlox_label_ok(
 
     ^FX Vertical Line
     ^FO564,0
-    ^GB1,360,1,B^FS
+    ^GB1,360,3,B^FS
 
     ^FX FW-Version (rotated Arial Bold)
-    ^FO595,100
+    ^FO595,120
     ^A@B,26,26,E:71028264.TTF
     ^FDFW: {fw_version}^FS
 
     ^FX Run Date (rotated Arial Bold)
-    ^FO655,100
+    ^FO655,120
     ^A@B,26,26,E:71028264.TTF
     ^FDDATE: {run_date}^FS
 
