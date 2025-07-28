@@ -597,30 +597,50 @@ def generate_svt_fortlox_label_nok(
     ^XA
     ^CI28
 
-    ^FX SV Article No (Arial Bold)
+    ^FX SV ARTICLE NUMBER (Arial Bold)
     ^FO30,30
     ^A@N,21,21,E:71028264.TTF
     ^FD{sv_article_no}^FS
 
-    ^FX Error Code (Arial Bold)
+    ^FX ERROR CODE (Arial)
     ^FO30,70
-    ^A@N,21,21,E:71028264.TTF
-    ^FDERROR CODE: {error_code}^FS
+    ^A@N,20,20,E:85620388.TTF
+    ^FDERROR CODE: ^FS
 
-    ^FX Date & Time (Arial Regular)
+    ^FX ERROR CODE VALUE(Arial Bold)
+    ^FO180,70
+    ^A@N,21,21,E:71028264.TTF
+    ^FD{error_code}^FS
+
+    ^FX DATE AND TIME (Arial)
     ^FO30,110
     ^A@N,20,20,E:85620388.TTF
-    ^FDDate (Time): {error_date} ({error_time})^FS
+    ^FDDate (Time): ^FS
 
-    ^FX Frequency Tolerance (Arial Regular)
+    ^FX DATE AND TIME VALUE (Arial Bold)
+    ^FO180,110
+    ^A@N,21,21,E:71028264.TTF
+    ^FD{error_date} ({error_time})^FS
+
+    ^FX FREQUENCY TOLERANCE (Arial)
     ^FO30,150
     ^A@N,20,20,E:85620388.TTF
-    ^FDFrequency Tolerance: {frequency_tolerance} ppm^FS
+    ^FDFrequency Tolerance: ^FS
 
-    ^FX Serial No (Arial Regular)
+    ^FX FREQUENCY TOLERANCE VALUE (Arial Bold)
+    ^FO250,150
+    ^A@N,21,21,E:71028264.TTF
+    ^FD{frequency_tolerance} ppm^FS
+
+    ^FX SERIAL NUMBER (Arial)
     ^FO30,190
     ^A@N,20,20,E:85620388.TTF
-    ^FDSerial: {serial_no}^FS
+    ^FDSerial: ^FS
+
+    ^FX SERIAL NUMBER VALUE (Arial Bold)
+    ^FO130,190
+    ^A@N,21,21,E:71028264.TTF
+    ^FD{serial_no}^FS
 
     ^XZ
     """
