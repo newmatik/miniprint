@@ -104,7 +104,7 @@ SVT_FORTLOX_NOK_VALIDATOR = RequestValidator([
     ValidationRule("error_code"),
     ValidationRule("error_date"),
     ValidationRule("error_time"),
-    ValidationRule("frequency_tolerance"),
+    ValidationRule("error_message"),
     ValidationRule("serial_no"),
 ])
 
