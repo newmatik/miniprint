@@ -568,7 +568,7 @@ def generate_svt_fortlox_label_nok(
     error_code: str,
     error_date: str,
     error_time: str,
-    frequency_tolerance: str,
+    error_message: str,
     serial_no: str,
 ) -> str:
     """
@@ -581,7 +581,7 @@ def generate_svt_fortlox_label_nok(
         error_code (str): The error code.
         error_date (str): The error date.
         error_time (str): The error time.
-        frequency_tolerance (str): The frequency tolerance.
+        error_message (str): Free text error message. For example: "Frequency Tolerance: 11776 ppm"
         serial_no (str): The serial number.
 
     Returns:
@@ -617,15 +617,10 @@ def generate_svt_fortlox_label_nok(
     ^A@N,21,21,E:71028264.TTF
     ^FD{error_date} ({error_time})^FS
 
-    ^FX FREQUENCY TOLERANCE (Arial)
+    ^FX ERROR MESSAGE (Arial Bold)
     ^FO30,150
-    ^A@N,20,20,E:85620388.TTF
-    ^FDFrequency Tolerance: ^FS
-
-    ^FX FREQUENCY TOLERANCE VALUE (Arial Bold)
-    ^FO250,150
     ^A@N,21,21,E:71028264.TTF
-    ^FD{frequency_tolerance} ppm^FS
+    ^FD{error_message}^FS
 
     ^FX SERIAL NUMBER (Arial)
     ^FO30,190
