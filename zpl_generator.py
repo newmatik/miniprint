@@ -619,7 +619,7 @@ def generate_svt_fortlox_label_nok(
 
     ^FX ERROR MESSAGE (Arial Bold)
     ^FO30,150
-    ^A@N,20,20,E:85620388.TTF
+    ^A@N,21,21,E:71028264.TTF
     ^FD{error_message}^FS
 
     ^FX SERIAL NUMBER (Arial)
