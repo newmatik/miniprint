@@ -608,27 +608,27 @@ def generate_svt_fortlox_label_nok(
     ^FD{error_code}^FS
 
     ^FX DATE AND TIME (Arial)
-    ^FO30,70
+    ^FO30,80
     ^A@N,20,20,E:85620388.TTF
     ^FDDate (Time): ^FS
 
     ^FX DATE AND TIME VALUE (Arial Bold)
-    ^FO180,70
+    ^FO180,80
     ^A@N,21,21,E:71028264.TTF
     ^FD{error_date} ({error_time})^FS
 
     ^FX ERROR MESSAGE (Arial Bold)
-    ^FO30,100
+    ^FO30,110
     ^A@N,21,21,E:71028264.TTF
     ^FD{error_message}^FS
 
     ^FX SERIAL NUMBER (Arial)
-    ^FO30,130
+    ^FO30,140
     ^A@N,20,20,E:85620388.TTF
     ^FDSerial: ^FS
 
     ^FX SERIAL NUMBER VALUE (Arial Bold)
-    ^FO130,130
+    ^FO130,140
     ^A@N,21,21,E:71028264.TTF
     ^FD{serial_no}^FS
 
