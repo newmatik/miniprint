@@ -164,8 +164,6 @@ def generate_zpl(
 def generate_msl_sticker(
     printer_id: str,
     msl: str,
-    date: str,
-    time: str,
     ) -> str:
     """
     Generate ZPL command for printing MSL stickers.
