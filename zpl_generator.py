@@ -172,8 +172,6 @@ def generate_msl_sticker(
     Args:
         printer_id (str): The printer ID.
         msl (str): The MSL level.
-        date (str): The date.
-        time (str): The time.
 
     Returns:
         str: The ZPL command for printing the MSL sticker.
