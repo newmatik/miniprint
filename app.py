@@ -1,11 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_restful import Api, Resource
 from functools import wraps
 import socket
 import os
 import logging
+import threading
+import time
 from dotenv import load_dotenv
-from printers import printers
+from printers import refresh_printers_from_erp, get_printers_snapshot
 from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok, generate_svt_fortlox_label_nok
 from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok, validate_svt_fortlox_request_nok
 
@@ -48,7 +50,7 @@ class PrinterCommunicationMixin:
             raise
 
     def get_printer_info(self, printer_id):
-        printer = printers.get(printer_id)
+        printer = get_printers_snapshot().get(printer_id)
         if not printer:
             raise ValueError('Printer ID not found')
         return printer
@@ -58,8 +60,20 @@ class PrinterList(Resource):
     method_decorators = [require_apikey]
 
     def get(self):
-        logging.debug(request.headers)
-        return printers
+        return get_printers_snapshot()
+
+
+class PrintersReload(Resource):
+    method_decorators = [require_apikey]
+
+    def post(self):
+        try:
+            refresh_printers_from_erp()
+            count = len(get_printers_snapshot())
+            return {'message': 'Printers reload triggered', 'count': count}
+        except Exception as e:
+            logging.error(f"Error reloading printers: {str(e)}")
+            return {'error': str(e)}, 500
 
 
 class PrinterStatus(Resource):
@@ -67,7 +81,7 @@ class PrinterStatus(Resource):
 
     def get(self):
         status = {}
-        for printer_id, printer_info in printers.items():
+        for printer_id, printer_info in get_printers_snapshot().items():
             try:
                 online = self.check_printer_status(printer_info['ip'], printer_info['port'])
                 status[printer_id] = 'Online' if online else 'Offline'
@@ -262,6 +276,7 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(Ping, '/ping')
 api.add_resource(PrinterList, '/printers')
 api.add_resource(PrinterStatus, '/printers/status')
+api.add_resource(PrintersReload, '/printers/reload')
 api.add_resource(PrintLabel, '/print')
 api.add_resource(PrintMsl, '/print/msl')
 api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
@@ -271,8 +286,33 @@ api.add_resource(PrintSvtFortloxLabelOk, '/print/svt-fortlox-ok')
 api.add_resource(PrintSvtFortloxLabelNok, '/print/svt-fortlox-nok')
 
 if __name__ == '__main__':
+    # Optional background auto-refresh of printers from ERP
+    debug_enabled = os.getenv('FLASK_DEBUG', 'false').lower() in ('1', 'true', 't', 'yes', 'y', 'on')
+    try:
+        refresh_seconds = int(os.getenv('PRINTERS_REFRESH_SECONDS', '0'))
+    except Exception:
+        refresh_seconds = 0
+
+    def _auto_refresh_worker(interval_seconds: int):
+        while True:
+            try:
+                time.sleep(interval_seconds)
+                refresh_printers_from_erp()
+            except Exception as e:
+                logging.error(f"Auto-refresh printers failed: {e}")
+
+    if refresh_seconds > 0:
+        should_start_thread = (not debug_enabled) or (os.environ.get('WERKZEUG_RUN_MAIN') == 'true')
+        if should_start_thread:
+            threading.Thread(
+                target=_auto_refresh_worker,
+                args=(refresh_seconds,),
+                name='PrintersAutoRefresh',
+                daemon=True,
+            ).start()
+
     app.run(
-        debug=os.getenv('FLASK_DEBUG', 'False') == 'True',
+        debug=debug_enabled,
         host='0.0.0.0',
         port=int(os.getenv('FLASK_RUN_PORT', 5500))
     )
