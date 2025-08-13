@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_restful import Api, Resource
 from functools import wraps
 import socket
 import os
 import logging
 from dotenv import load_dotenv
-from printers import printers
+from printers import printers, refresh_printers_from_erp
 from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok, generate_svt_fortlox_label_nok
 from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok, validate_svt_fortlox_request_nok
 
@@ -60,6 +60,18 @@ class PrinterList(Resource):
     def get(self):
         logging.debug(request.headers)
         return printers
+
+
+class PrintersReload(Resource):
+    method_decorators = [require_apikey]
+
+    def post(self):
+        try:
+            refresh_printers_from_erp()
+            return {'message': 'Printers reloaded from ERP', 'count': len(printers)}
+        except Exception as e:
+            logging.error(f"Error reloading printers: {str(e)}")
+            return {'error': str(e)}, 500
 
 
 class PrinterStatus(Resource):
@@ -262,6 +274,7 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(Ping, '/ping')
 api.add_resource(PrinterList, '/printers')
 api.add_resource(PrinterStatus, '/printers/status')
+api.add_resource(PrintersReload, '/printers/reload')
 api.add_resource(PrintLabel, '/print')
 api.add_resource(PrintMsl, '/print/msl')
 api.add_resource(PrintSpecialInstructions, '/print/special-instructions')
