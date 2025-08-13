@@ -4,6 +4,8 @@ import os
 import requests
 from dotenv import load_dotenv
 from typing import Dict, Any
+from urllib.parse import quote
+from threading import RLock
 
 _LOCAL_FALLBACK_PRINTERS: Dict[str, Dict[str, Any]] = {
     'prt-batch-TWR1': {'ip': '10.1.0.48', 'port': 9100},
@@ -40,7 +42,7 @@ def _load_printers_from_erp() -> Dict[str, Dict[str, Any]]:
         logging.info("ERP config not found; using local fallback printers")
         return {}
 
-    url = erp_url.rstrip('/') + f"/api/resource/{doctype}"
+    url = erp_url.rstrip('/') + "/api/resource/" + quote(doctype, safe='')
 
     requested_fields = ['printer_name', 'server_ip', 'port']
 
@@ -90,15 +92,24 @@ def _build_printers_mapping() -> Dict[str, Dict[str, Any]]:
 
 # Public mapping used by the app
 printers: Dict[str, Dict[str, Any]] = {}
-printers.update(_build_printers_mapping())
+_PRINTERS_LOCK = RLock()
+with _PRINTERS_LOCK:
+    printers.update(_build_printers_mapping())
 
 
 def refresh_printers_from_erp() -> None:
     """Reload printers from ERP into the global mapping. Keeps fallback if ERP yields nothing."""
     erp_printers = _load_printers_from_erp()
     if erp_printers:
-        printers.clear()
-        printers.update(erp_printers)
+        with _PRINTERS_LOCK:
+            printers.clear()
+            printers.update(erp_printers)
         logging.info(f"Refreshed printers from ERP: {len(printers)} entries")
     else:
         logging.info("ERP refresh returned no data; keeping existing printers mapping")
+
+
+def get_printers_snapshot() -> Dict[str, Dict[str, Any]]:
+    """Thread-safe snapshot for readers to iterate without races."""
+    with _PRINTERS_LOCK:
+        return dict(printers)

@@ -7,7 +7,7 @@ import logging
 import threading
 import time
 from dotenv import load_dotenv
-from printers import printers, refresh_printers_from_erp
+from printers import printers, refresh_printers_from_erp, get_printers_snapshot
 from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok, generate_svt_fortlox_label_nok
 from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok, validate_svt_fortlox_request_nok
 
@@ -61,7 +61,7 @@ class PrinterList(Resource):
 
     def get(self):
         logging.debug(request.headers)
-        return printers
+        return get_printers_snapshot()
 
 
 class PrintersReload(Resource):
@@ -81,7 +81,7 @@ class PrinterStatus(Resource):
 
     def get(self):
         status = {}
-        for printer_id, printer_info in printers.items():
+        for printer_id, printer_info in get_printers_snapshot().items():
             try:
                 online = self.check_printer_status(printer_info['ip'], printer_info['port'])
                 status[printer_id] = 'Online' if online else 'Offline'
@@ -287,7 +287,7 @@ api.add_resource(PrintSvtFortloxLabelNok, '/print/svt-fortlox-nok')
 
 if __name__ == '__main__':
     # Optional background auto-refresh of printers from ERP
-    debug_enabled = os.getenv('FLASK_DEBUG', 'False') == 'True'
+    debug_enabled = os.getenv('FLASK_DEBUG', 'false').lower() in ('1', 'true', 't', 'yes', 'y', 'on')
     try:
         refresh_seconds = int(os.getenv('PRINTERS_REFRESH_SECONDS', '0'))
     except Exception:
