@@ -4,6 +4,8 @@ from functools import wraps
 import socket
 import os
 import logging
+import threading
+import time
 from dotenv import load_dotenv
 from printers import printers, refresh_printers_from_erp
 from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok, generate_svt_fortlox_label_nok
@@ -284,6 +286,31 @@ api.add_resource(PrintSvtFortloxLabelOk, '/print/svt-fortlox-ok')
 api.add_resource(PrintSvtFortloxLabelNok, '/print/svt-fortlox-nok')
 
 if __name__ == '__main__':
+    # Optional background auto-refresh of printers from ERP
+    debug_enabled = os.getenv('FLASK_DEBUG', 'False') == 'True'
+    try:
+        refresh_seconds = int(os.getenv('PRINTERS_REFRESH_SECONDS', '0'))
+    except Exception:
+        refresh_seconds = 0
+
+    def _auto_refresh_worker(interval_seconds: int):
+        while True:
+            try:
+                time.sleep(interval_seconds)
+                refresh_printers_from_erp()
+            except Exception as e:
+                logging.error(f"Auto-refresh printers failed: {e}")
+
+    if refresh_seconds > 0:
+        should_start_thread = (not debug_enabled) or (os.environ.get('WERKZEUG_RUN_MAIN') == 'true')
+        if should_start_thread:
+            threading.Thread(
+                target=_auto_refresh_worker,
+                args=(refresh_seconds,),
+                name='PrintersAutoRefresh',
+                daemon=True,
+            ).start()
+
     app.run(
         debug=os.getenv('FLASK_DEBUG', 'False') == 'True',
         host='0.0.0.0',
