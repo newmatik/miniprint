@@ -61,8 +61,6 @@ STANDARD_VALIDATOR = RequestValidator([
 MSL_VALIDATOR = RequestValidator([
     ValidationRule("printer_id"),
     ValidationRule("msl"),
-    ValidationRule("date"),
-    ValidationRule("time"),
 ])
 
 SPECIAL_INSTRUCTIONS_VALIDATOR = RequestValidator([
