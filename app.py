@@ -7,7 +7,7 @@ import logging
 import threading
 import time
 from dotenv import load_dotenv
-from printers import printers, refresh_printers_from_erp, get_printers_snapshot
+from printers import refresh_printers_from_erp, get_printers_snapshot
 from zpl_generator import generate_zpl, generate_msl_sticker, generate_special_instructions_label, generate_dry_label, generate_tracescan_label, generate_svt_fortlox_label_ok, generate_svt_fortlox_label_nok
 from validation import validate_request, validate_msl_request, validate_special_instructions_request, validate_dry_request, validate_tracescan_request, validate_svt_fortlox_request_ok, validate_svt_fortlox_request_nok
 
@@ -50,7 +50,7 @@ class PrinterCommunicationMixin:
             raise
 
     def get_printer_info(self, printer_id):
-        printer = printers.get(printer_id)
+        printer = get_printers_snapshot().get(printer_id)
         if not printer:
             raise ValueError('Printer ID not found')
         return printer
@@ -60,7 +60,6 @@ class PrinterList(Resource):
     method_decorators = [require_apikey]
 
     def get(self):
-        logging.debug(request.headers)
         return get_printers_snapshot()
 
 
@@ -70,7 +69,8 @@ class PrintersReload(Resource):
     def post(self):
         try:
             refresh_printers_from_erp()
-            return {'message': 'Printers reloaded from ERP', 'count': len(printers)}
+            count = len(get_printers_snapshot())
+            return {'message': 'Printers reload triggered', 'count': count}
         except Exception as e:
             logging.error(f"Error reloading printers: {str(e)}")
             return {'error': str(e)}, 500
@@ -312,7 +312,7 @@ if __name__ == '__main__':
             ).start()
 
     app.run(
-        debug=os.getenv('FLASK_DEBUG', 'False') == 'True',
+        debug=debug_enabled,
         host='0.0.0.0',
         port=int(os.getenv('FLASK_RUN_PORT', 5500))
     )

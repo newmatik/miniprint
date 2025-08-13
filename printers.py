@@ -75,6 +75,10 @@ def _load_printers_from_erp() -> Dict[str, Dict[str, Any]]:
         except Exception:
             port = 9100
 
+        if not (1 <= port <= 65535):
+            logging.warning(f"Invalid port '{port}' for printer '{printer_id}', defaulting to 9100")
+            port = 9100
+
         result[str(printer_id)] = {'ip': str(server_ip), 'port': port}
 
     return result
