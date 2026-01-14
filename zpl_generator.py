@@ -413,6 +413,8 @@ def generate_tracescan_label(
     mcua_serial: str,
     lcda_description: str,
     lcda_serial: str,
+    giof_description: str = None,
+    giof_serial: str = None,
     ) -> str:
     """
     Generate ZPL command for printing tracescan label.
@@ -432,6 +434,8 @@ def generate_tracescan_label(
         mcua_serial (str): The mcua serial.
         lcda_description (str): The lcda description.
         lcda_serial (str): The lcda serial.
+        giof_description (str, optional): The giof description (for new versions).
+        giof_serial (str, optional): The giof serial (for new versions).
 
     Returns:
         str: The ZPL command for printing the tracescan label.
@@ -447,40 +451,59 @@ def generate_tracescan_label(
     ioca_description = ioca_description.strip().replace("-", " ").upper()
     mcua_description = mcua_description.strip().replace("-", " ").upper()
     lcda_description = lcda_description.strip().replace("-", " ").upper()
+    if giof_description and giof_serial:
+        giof_description = giof_description.strip().replace("-", " ").upper()
 
     return f"""
     ^XA
     ^CI28
 
-    ^FX Item Description
-    ^CFP,30,30
-    ^FO60,20^FDAssembly CND{standard_indicator} (HW {hw_version}, SW{sw_version})^FS
+    ^PW559
+    ^LL280
+    ^LH0,0
 
-    ^FX Code128 with WO Serial Number
+    ^FX ===== Title / Item Description =====
+    ^A0N,30,30
+    ^FO0,20^FB559,1,0,C,0^FDAssembly CND{standard_indicator} (HW {hw_version}, SW {sw_version})\&^FS
+
+    ^FX ===== Barcode (Code128) =====
     ^BY2,3,10
-    ^FO60,65
-    ^BCN,80,Y,N,N
+    ^FO65,55
+    ^BCN,72,Y,N,N
     ^FD{wo_serial_number}^FS
 
-    ^FX GINV Details
-    ^CFP,15
-    ^FO60,185^FD{ginv_description}^FS
-    ^FO60,205^FD{ginv_serial}^FS
+    ^FX ===== Subassemblies (Serials left / Descriptions right) =====
+    ^FX Serial column X=120, Description column X=275
 
-    ^FX IOCA Details
-    ^CFP,15
-    ^FO60,225^FD{ioca_description}^FS
-    ^FO60,245^FD{ioca_serial}^FS
+    ^FX Row 1 (GINV details)
+    ^A0N,20,20
+    ^FO120,165^FD{ginv_serial}^FS
+    ^A0N,20,20
+    ^FO275,165^FD{ginv_description}^FS
 
-    ^FX MCUA Details
-    ^CFP,15
-    ^FO330,185^FD{mcua_description}^FS
-    ^FO330,205^FD{mcua_serial}^FS
+    ^FX Row 2 (MCUA details)
+    ^A0N,20,20
+    ^FO120,185^FD{mcua_serial}^FS
+    ^A0N,20,20
+    ^FO275,185^FD{mcua_description}^FS
 
-    ^FX LCDA Details
-    ^CFP,15
-    ^FO330,225^FD{lcda_description}^FS
-    ^FO330,245^FD{lcda_serial}^FS
+    ^FX Row 3 (IOCA details)
+    ^A0N,20,20
+    ^FO120,205^FD{ioca_serial}^FS
+    ^A0N,20,20
+    ^FO275,205^FD{ioca_description}^FS
+
+    ^FX Row 4 (LCDA details)
+    ^A0N,20,20
+    ^FO120,225^FD{lcda_serial}^FS
+    ^A0N,20,20
+    ^FO275,225^FD{lcda_description}^FS
+
+    ^FX Row 5 (GIOF details)
+    ^A0N,20,20
+    ^FO120,245^FD{giof_serial}^FS
+    ^A0N,20,20
+    ^FO275,245^FD{giof_description}^FS
 
     ^XZ
     """
