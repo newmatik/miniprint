@@ -453,6 +453,10 @@ def generate_tracescan_label(
     lcda_description = lcda_description.strip().replace("-", " ").upper()
     if giof_description and giof_serial:
         giof_description = giof_description.strip().replace("-", " ").upper()
+    else:
+        # Leave empty to avoid printing "None" on label
+        giof_description = ""
+        giof_serial = ""
 
     return f"""
     ^XA
