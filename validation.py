@@ -86,6 +86,8 @@ TRACESCAN_VALIDATOR = RequestValidator([
     ValidationRule("mcua_serial"),
     ValidationRule("lcda_description"),
     ValidationRule("lcda_serial"),
+    ValidationRule("giof_description", FieldRequirement.OPTIONAL),
+    ValidationRule("giof_serial", FieldRequirement.OPTIONAL),
 ])
 
 SVT_FORTLOX_OK_VALIDATOR = RequestValidator([
